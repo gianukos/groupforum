@@ -1,0 +1,15 @@
+{
+    "name": "groupomania-app-front-end",
+    "version": "1.0.0",
+    "description": "",
+    "main": "server.js",
+    "scripts": {
+      "start": "node server",
+      "devel": "nodemon",
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+    }
+}

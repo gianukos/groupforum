@@ -2,6 +2,7 @@
     "name": "groupomania-app-front-end",
     "version": "1.0.0",
     "description": "",
+    "type":"module",
     "main": "server.js",
     "scripts": {
       "start": "node server",

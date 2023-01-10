@@ -1,9 +1,5 @@
 const connection = require('./middleware/groupomania');
 
-connection.on('acquire', function (connection) {
-  console.log('Connection %d acquired', connection.threadId);
-});
-
 connection.query(
     `
     USE groupomania;

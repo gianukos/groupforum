@@ -4,7 +4,9 @@
 		<meta charset="UTF-8"/>
 		<meta http-equiv="x-ua-compatible" content="ie-edge"/>
 		<meta name="viewport" content="width=device-width, height=device-height, viewport-fit=cover, initial-scale=1, minimum-scale=1, user-scalable=no" />
-		<script src="https://cdn.jsdelivr.net/npm/vue@3.2.45/dist/vue.global.min.js"></script>	
+		<script src="https://cdn.jsdelivr.net/npm/vue@3.2.45/dist/vue.global.min.js"></script>
+		<script src="./src/index.js"  type="module"></script>
+		<link rel="modulepreload" href="/src/components/app.js">
 		<title>web forum</title>
 		<style>
 			body{background-color: blue; 
@@ -22,25 +24,26 @@
 				50%  {opacity: 0.04;transform: translateY(-50px);}
 				100% {opacity: 0.15;transform: translateY(-190px);}
 			}
-			header{display: flex; justify-content: stretch; padding-bottom: 15px; border-bottom-color:purple; border-bottom-style:solid}
+			header{display: block;  padding-bottom: 15px; border-bottom-color:purple; border-bottom-style:solid}
 			header div.logo{position: relative; margin-right: 55%;  display:block; z-index:1}
-
-			nav.welcome{position: relative; right: 175%; top: 35px; display: flex; flex-wrap: nowrap;}
-			nav.welcome:last-child {top: -121px;}
+			main.groupomania h1{color: pink; padding: 5rem 5rem; font-size: 32pt; position: relative; right: 24px; display:block; z-index:1}
+			nav.welcome{position: absolute; left: 65%; top: 5%; display: flex; flex-wrap: nowrap;}
 			nav.welcome a {font-size: 18pt; color:white; text-decoration:none; transition: color .4s ease-out; display:block; z-index:1; position: relative;}
 			nav.welcome a:link {color: #ffffff;}
 			nav.welcome a:hover {color: #01fff6;}
 			nav.welcome a:not(:hover) {color: #ffffff;}
 			nav.welcome a:last-child {margin-left:80px;}
-			main.groupomania h1{color: pink; padding: 5rem 5rem; font-size: 32pt; position: relative; right: 24px; display:block; z-index:1}
-			@media screen and (max-width: 815px){div.logo svg{width: 285px; height:95px;} nav.welcome{right: 205px;} nav.welcome a{font-size: 14pt;} nav.welcome a:last-child{margin-left: 35px}nav.welcome a:focus {color: #01fff6;}nav.welcome a:not(:focus){color: #fffaaa;}input{max-width: 400px;} } 
-			@media screen and (max-width: 415px) {div.logo svg{width: 185px; height:95px;} div.logo{top:5px;}nav.welcome a{font-size: 12pt;} nav.welcome a:last-child{margin-left: 35px} nav.welcome {right: 125px; top:45px;} input{max-width: 200px;}}
+			@media screen and (max-width: 815px){div.logo svg{width: 285px; height: 95px;} nav.welcome{top: 6%;} nav.welcome a{font-size: 14pt;} nav.welcome a:last-child{margin-left: 45px}nav.welcome a:focus {color: #01fff6;}nav.welcome a:not(:focus){color: #fffaaa;}input{max-width: 400px; align-items: center;} } 
+			@media screen and (max-width: 485px){div.logo svg{width: 235px;} nav.welcome a{font-size: 13pt;}}
+			@media screen and (max-width: 415px) {div.logo svg{width: 185px; height:95px;}nav.welcome a{font-size: 12pt;} nav.welcome a:last-child{margin-left: 25px}  input{max-width: 200px;}}
+			@media screen and (max-width: 315px){div.logo svg{width: 145px;}}
 			section.userInfo{display:flex; justify-content: center; position: relative; bottom: 320px; flex-wrap: wrap;}
 			div.input{text-align: center;}
 			div.firstmsg p{margin: 0 25% 10px;}
 			section#newuser p span{color: pink;}
 			input{height: 48px; width: 800px; margin: 10px 300px;}
 			input.submit, input.button{width: 10rem; border-radius: 10px; color: purple; font-weight: 600;}
+			input.button:hover{font-size: .9rem;}
 			footer{height: 3%; width: 100%; border-top-color:purple;border-top-style:solid;}
 			footer hr{opacity: 0;margin-top: 5%;}
 		</style>
@@ -65,16 +68,6 @@
 					</g>
 				</svg>
 			</div>
-			<div>
-				<nav class="welcome">
-					<a id="atlogin" href="#login">login</a>
-					<a id="atsignup" href="#signup">sign up</a>
-				</nav>
-				<nav class="welcome">
-					<a id="profile" href="#">profile</a>
-					<a id="atlogout" href="#">sign out</a>
-				</nav>
-			</div>
 		</header>
 		<main class="groupomania">
 			<h1>web forum</h1>
@@ -97,215 +90,8 @@
 						</g>
 					</svg>
 			</div>
-			<div id="app">
-				<section id="login" class="userInfo" >
-					<form v-show="route('login')" @submit.prevent novalidate="true">
-						<div class="input"> 
-							<h3>Login</h3>
-							<input :required="true" v-if="emailAddress" type="email" id="email" name="emailAddress" :value="emailAddress"  />
-							<input :required="true" v-else type="email" placeholder="Enter your email address" name="emailAddress" v-model.lazy="emailAddress"  />
-							<input :required="true" type="password" placeholder="Enter a password" name="pwd" v-model="inputPass"/>
-							<input type="button" class="submit" @click="submitLogin(validEmail(emailAddress), checkPass(inputPass))&&postLogin(emailAddress, inputPass)" value="Submit" />
-							<div>
-								<p v-show=emailError>Please input a valid email.</p>
-							</div>
-							<div>
-								<p v-show=pwdError>Password required (minimum 7 characters).</p>
-							</div>
-							<div><p id="loginErr"></p></div>
-						</div>
-					</form>
-				</section>
-				<section id="signup" class="userInfo">
-					<form v-show="route('signup')" method="post">
-						<div class="input">
-							<h3>Sign up</h3>
-							<input type="email" name="email"  v-model="emailAddress" placeholder="Enter your email address"  required />
-							<input type="password" placeholder="Enter a password" name="pwd" v-model="inputPass" required />
-							<input type="button" class="submit"  @click="submitSignup(validEmail(emailAddress), checkPass(inputPass))&&postSignup(emailAddress, inputPass)" value="Submit" />
-							<div>
-								<p v-show=emailError>Please input a valid email.</p>
-							</div>
-							<div>
-								<p v-show=pwdError>Password required (minimum 7 characters).</p>
-							</div>
-							<div><p id="signupErr"></p></div>
-						</div>
-					</form>
-				</section>
-				<section id="newuser" class="userInfo">
-					<div class="input" v-show="route('newuser')">
-						<p>Your login: <span>{{emailAddress}}</span></p>
-						<h4>Welcome!</h4>
-						<div class="firstmsg">
-							<p>You have just signed into the <strong>Groupomania</strong> web forum for the first time.  Use the app to post links
-							to articles and information on the web of interest to your colleagues at <strong>Groupomania</strong>.</p>
-							<p>Post commentary prepared by yourself about any topic.  On the home page after login will appear recent posts not yet viewed.  
-							There will also be access to current information about your account.</p>
-						</div>
-						<input type="button" class="button" @click="showLogin" value="Login" />
-					</div>
-				</section>
-				<section id="user" class="userInfo">
-					<div  v-show="route('onlogin')">{{onwelcome}}{{emailAddress}}</div>
-				</section>
-			</div>
+			<div id="app"></div>
 		</main>
 		<footer><hr></footer>
-		<script crossorigin="anonymous">
-				const app = Vue.createApp({
-					data() {
-						return{
-						appName: 'web forum',
-						endpoint: 'http://localhost:3000/api',						
-						emailError: false,
-						pwdError: false,
-						emailAddress: '',
-						inputPass: '',
-						router: []
-						}
-					},
-					methods: {
-						view(){
-							return this.router.length - 1;
-						},
-						route(section){
-							return this.router[this.view()] === section ? true : false ;
-						},
-						showLogin(){							
-							this.router.push("login");
-						},
-						showSignup(){							
-							this.router.push("signup");
-						},
-						onSignup(){							
-							this.router.push("newuser")
-						},
-						onLogin(){
-							this.router.push("onlogin")
-						},
-						submitSignup(e, p) {
-							if ( e && p ){								
-								return true;
-							} else {
-								if ( !e) { 
-									this.emailError = true;
-									this.emailAddress = ""; 
-								} else {
-									this.emailError = false;
-									this.pwdError = true;
-									this.inputPass = "";
-								}
-								return false;
-							}
-						},
-						submitLogin( e, p ) {
-							if ( e && p ){								
-								return true;
-							} else {
-								if ( !e) { 
-									this.emailError = true;
-									this.emailAddress = "";
-								} else {
-									this.emailError = false;
-									this.pwdError = true;
-									this.inputPass = "";
-								}
-								return false;
-							}
-							document.getElementsByClassName("welcome")[0].style.top  = '-71px';
-							document.getElementsByClassName("welcome")[1].style.top  = '5px';
-						},
-						validEmail(email) {
-							var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-							return re.test(email);
-						},
-						checkPass(password) {
-							if ( password.length < 7 ) {
-								this.pwdError = true;
-								return false;
-							} else {
-								this.pwdError = false;
-								return true;
-							}
-						},
-						logout(){
-							var storedUser = sessionStorage.getItem("sessionUser")
-							sessionStorage.removeItem("sessionUser")
-							sessionStorage.removeItem("sessionToken")
-							sessionStorage.removeItem("eaddr")
-							window.location.href = window.location.origin + "/index.html";
-							console.log(this.appName + " has restarted   [" + storedUser + " log out]" )
-							storedUser = null
-						},
-						postSignup(emailParam, passwordParam){
-							var dataStr = `{"name":"", "email":"${emailParam}", "password":"${passwordParam}", "bio":"" }`;
-							const signupParams = JSON.parse(dataStr);
-							const requestOpts = { method:"POST",  headers:{"Content-Type":"application/json"}, body:JSON.stringify(signupParams)};
-							console.log(requestOpts.body)
-							fetch(this.endpoint + "/auth/signup", requestOpts)
-								.then(response => response.text()) 					
-								.then((responseAddr) => {
-									if ( responseAddr === '"' + this.emailAddress + '"'){										
-										this.onSignup();
-									}else{										
-										this.route("signup")||this.showSignup();
-										if (responseAddr === '\"registered user\"'){
-											document.getElementById('signupErr').innerText = this.emailAddress + " is already signed up!";
-										}
-									}
-								}) 								
-								.catch(	(error) => {
-									return false
-								} 
-							)
-						},
-						postLogin(emailParam, passwordParam){
-							var dataStr = `{ "email":"${emailParam}", "password":"${passwordParam}" }`;
-							const loginParams = JSON.parse(dataStr);
-							const requestOpts = { method:"POST",  headers:{"Content-Type":"application/json"}, body:JSON.stringify(loginParams)};
-							(async () => {
-								const response = await fetch(this.endpoint + "/auth/login", requestOpts).catch(	(error) => { return false })
-								if ( response.status === 200 ){									
-									this.onLogin();
-									const auth = await response.json();
-									sessionStorage.setItem("sessionUser", auth.userId)
-									sessionStorage.setItem("sessionToken", auth.token)
-									sessionStorage.setItem("eaddr", this.emailAddress)
-									document.getElementsByClassName("welcome")[0].style.top  = '-71px';
-									document.getElementsByClassName("welcome")[1].style.top  = '5px';				
-								}else{
-									this.route("login")||this.showLogin()
-									if (response.status === 401 ){
-										this.inputPass = "";
-										this.emailAddress = "";
-										document.getElementById('loginErr').innerText = "Please try again :  " +  response.statusText;
-									}
-									return false;
-								}
-							})(); 
-						}
-					},
-					computed: {
-						onwelcome: function(){	
-							return ("Logged in as ")
-						}
-					}
-				}).mount('#app')	
-		</script>
-		<script>
-			if (sessionStorage.getItem("sessionUser")&&app.emailAddress===''){
-				if (app.emailAddress = sessionStorage.getItem("eaddr")){ 
-					// page properties reloaded when user is logged in 
-					document.getElementsByClassName("welcome")[0].style.top  = '-71px';
-					document.getElementsByClassName("welcome")[1].style.top  = '5px';	
-					app.onLogin()		
-				}
-			}
-			document.getElementById('atlogin').addEventListener('click', (event) => {app.showLogin()});
-			document.getElementById('atsignup').addEventListener('click', (event) => {app.showSignup()});
-			document.getElementById('atlogout').addEventListener('click', (event) => {app.logout()});
-			document.getElementById('profile').addEventListener('click', (event) => {app.showProfile()});
-		</script>
 		</body>
 	</html>

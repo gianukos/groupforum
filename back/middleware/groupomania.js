@@ -10,10 +10,6 @@ connection.query(
       CREATE DATABASE IF NOT EXISTS groupomania ;
     `
       , function(error){if (error) throw error;}
-  ).then(
-    `
-    USE groupomania;
-    ` , function(error){if (error) throw error;}
   )
-
+  
   module.exports = connection;

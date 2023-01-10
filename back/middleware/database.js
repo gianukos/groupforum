@@ -4,7 +4,6 @@ require("dotenv").config();
 
 
 var mysql = require("mysql")
-// const pool = require("./groupomania")
 
 const groupomaniaPoolConfig = {
   connectionLimit: 10,
@@ -36,5 +35,9 @@ pool.getConnection((err, connection) => {
   
   // Promisify for Node.js async/await.
   pool.query = util.promisify(pool.query)
+
+  pool.on('acquire', function (connection) {
+    console.log('Connection %d acquired', connection.threadId);
+  });
   
   module.exports = pool

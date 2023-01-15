@@ -7,7 +7,7 @@ const appMain = `
 				<a @click="showSignup()" href="#signup">sign up</a>
 			</nav>
 			<nav class="welcome" v-show="!navLogin">
-				<a @click="showEdit()" href="#user">profile</a>
+				<a @click="profileExists() && showEdit()" href="#user">profile</a>
 				<a @click="logout" href="#">sign out</a>
 			</nav>
 		</div>
@@ -40,35 +40,53 @@ const appMain = `
 		</section>
 		<section id="newuser" class="userInfo">
 		<div class="input" v-show="route('newuser')">
-			<p>Your login: <span>{{emailAddress}}</span></p>
+			<p>New account created</p>
+			<p>Login: <span>{{emailAddress}}</span></p>
 			<h4>Welcome!</h4>
-			<div class="firstmsg">
-				<p>You have just signed into the <strong>Groupomania</strong> web forum for the first time.  Use the app to post links
-				to articles and information on the web of interest to your colleagues at <strong>Groupomania</strong>.</p>
-				<p>Post commentary prepared by yourself about any topic.  On the home page after login will appear recent posts not yet viewed.  
-				There will also be access to current information about your account.</p>
-			</div>
 			<input type="button" class="button" @click="showLogin" value="Login" />
 		</div>
 		</section>
 		<section id="user" class="userInfo">
-			<div>
-				<div v-if="route('profile')">
-					<div>
-						<input type="text" placeholder="first name">
-						<input type="text" placeholder="last name">
-					</div>
+		<div>
+		<div v-if="route('profile')">
+		<form type="submit">
+			<div class="input">
+				<h3>Edit profile<br>____________</h3>
+				<h4 class="edit">Your name</h4>
+				<p>current name: <span>{{profile.name}}</span></p>
+				<input v-model="edit.name" type="text" placeholder="Give yourself a username">
+				<h4 class="edit">Your story</h4>
+				<p>current bio: <br><span>{{profile.bio}}</span></p>
+				<div>
+					<textarea v-model="edit.bio" name="bio" id="bio" label="bio" placeholder="Include some information about yourself." spellcheck="true" rows="8" cols="70"></textarea><br>
+					<div><input type="button" class="submit" value="submit" @click="setProfile(edit.name, edit.bio)" /><input type="button" class="submit noedit" value="cancel edit" @click="getEaddr()&&onLogin()"/></div>
 				</div>
-				<div v-else>
-					<div v-if="!(route('login')|route('signup')|route('newuser'))">
-						<input type="button" class="button" @click="showCreate" value="Create a post" />
-						<input type="button" class="button" @click="showPosts" value="Read group posts" />
-					</div>
-				</div>
-				<div v-show="route('onlogin')" class="input">
-					<p>{{onwelcome}}{{emailAddress}}</p>
+				<h4 class="edit">Delete your account</h4>
+				<div>
+					<input type="button"  class="submit" value="Delete account" @click="router.push('delete')"/>
 				</div>
 			</div>
+		</form>
+		</div>
+		<div v-else>
+			<div v-show="!(route('login')||route('signup')||route('newuser')||route('delete'))" class="forumControls">
+				<input type="button" class="button" @click="showCreate" value="Create a post" />
+				<input type="button" class="button" @click="showPosts" value="Read group posts" />
+			</div>
+		</div>
+		</div>
+		<div v-show="route('delete')">
+			<div class="delete input">
+				<p>Is this "goodbye"?</p>
+				<input type="button"  class="submit" value="Yes, do it." @click="profileExists(false)"/>
+				<input type="button"  class="submit" value="Maybe not." @click="getEaddr()&&onLogin()"/>
+				<p id="accountClosed"></p>
+			</div>
+		</div>
+		<div v-show="route('onlogin')" class="input">
+			<p>{{onwelcome}}{{emailAddress}}</p>
+			<div><p id="dbresult"></p></div>
+		</div>
 		</section>
 	`;
 
@@ -87,6 +105,7 @@ export default {
 		navLogin: true,
 		emailAddress: '',
 		inputPass: '',
+		edit: {name:'', bio:''},
 		router: [],
 		}
 	},
@@ -122,6 +141,12 @@ export default {
 		onLogin(){
 			this.router.push("onlogin")
 			this.navLogin = false;
+		},
+		getEaddr(){
+			if (this.emailAddress == ""){
+				this.emailAddress = sessionStorage.getItem('eaddr');
+			}
+			return true;
 		},
 		submitSignup(e, p) {
 			if ( e && p ){								
@@ -167,10 +192,8 @@ export default {
 			}
 		},
 		logout(){
-			var storedUser = sessionStorage.getItem("sessionUser")
-			sessionStorage.removeItem("sessionUser")
-			sessionStorage.removeItem("sessionToken")
-			sessionStorage.removeItem("eaddr")
+			var storedUser = sessionStorage.getItem("sessionUser") 
+			sessionStorage.clear();
 			window.location.href = window.location.origin + "/index.html";
 			setTimeout(console.log(this.appName + " has restarted   [" + storedUser + " log out]" ), 7500)
 			storedUser = null
@@ -220,12 +243,81 @@ export default {
 					return false;
 				}
 			})(); 
+		},
+		setProfile(nameParam, bioParam){
+			var dataStr = `{ "name":"${nameParam}", "bio":"${bioParam}" }`;
+			const userID = sessionStorage.getItem('sessionUser');
+			const userToken = sessionStorage.getItem('sessionToken');
+			const userParams = JSON.parse(dataStr);
+			const requestOpts = { method:"PUT",  headers:{"Content-Type":"application/json"},  Authorization: "Bearer " + userToken, body:JSON.stringify(userParams)};
+			(async () => {
+				const response = await fetch(this.endpoint + '/auth/' + userID, requestOpts).catch(	(error) => { return false })
+				if ( response.status === 200 ){
+					localStorage.setItem("userName", nameParam); 
+					localStorage.setItem("userBio",  bioParam);
+					this.profile = userID + '###' + nameParam + '###' + bioParam;
+					this.onLogin();
+					this.emailAddress = sessionStorage.getItem('eaddr');
+					document.getElementById('dbresult').innerText = "Profile updated!"
+					
+				}else{
+					document.getElementById('dbresult').innerText = "Please try again :  " +  response.statusText;
+				}
+			})();
+		},
+		profileExists(state=true){
+			const userID = sessionStorage.getItem('sessionUser');
+			const userToken = sessionStorage.getItem('sessionToken');
+			var method = "";
+			method = state ? "GET" : "DELETE";
+			const requestOpts = { method:method, headers:{Authorization: "Bearer " + userToken} };
+			(async () => {
+				const response = await fetch(this.endpoint + '/auth/' + userID, requestOpts).catch(	(error) => { return false })
+				if ( response.status === 200  ){
+					if ( state === true ){
+						const auth = await response.json();
+						localStorage.setItem("userName", auth.Name);
+						localStorage.setItem("userBio",  auth.Bio);
+						this.edit.name = '';
+						this.edit.bio = '';
+						this.profile = userID + '###' + auth.Name + '###' + auth.Bio ;
+					} else {
+						setTimeout(this.logout(), 15000)
+						document.getElementById("accountClosed").innerText = "Account is deleted.  About to signout of the app."
+						localStorage.clear();
+					}
+				}else{
+					if ( state === true ){
+						console.log( `could not retrieve name and bio for ${userID}`)
+					} else {
+						this.showEdit();
+						document.getElementById('dbresult').innerText = "Unable to delete account :  " +  response.statusText;
+					}					
+				}					
+			})();
+			return true;
 		}
 	},
 	computed: {
 		onwelcome: function(){	
 			return ("Logged in as ")
-		}
+		},
+		profile: {
+			get(){
+				var id = sessionStorage.getItem("sessionUser");
+				var name = localStorage.getItem("userName");
+				var bio = localStorage.getItem("userBio");
+				// replace null value with string
+				if(typeof(name)==='object'){name = 'none'};
+				if(typeof(bio)==='object'){bio = 'none'};
+				this.id = id; this.name = name; this.bio = bio;
+				return this;
+			},
+			set(newValue){
+				[this.id, this.name, this.bio] = newValue.split('###');
+				console.log(this.name);
+			}
+		},
 	},
 	template: appMain
 };

@@ -27,17 +27,18 @@
 			header{display: block;  padding-bottom: 15px; border-bottom-color:purple; border-bottom-style:solid}
 			header div.logo{position: relative; margin-right: 55%;  display:block; z-index:1}
 			main.groupomania h1{color: pink; padding: 5rem 5rem; font-size: 32pt; position: relative; right: 24px; display:block; z-index:1}
+			h4.edit, p#dbresult{color: pink; padding: 1rem 1rem; font-size: 18pt;}
 			nav.welcome{position: absolute; left: 65%; top: 5%; display: flex; flex-wrap: nowrap;}
 			nav.welcome a {font-size: 18pt; color:white; text-decoration:none; transition: color .4s ease-out; display:block; z-index:1; position: relative;}
 			nav.welcome a:link {color: #ffffff;}
 			nav.welcome a:hover {color: #01fff6;}
 			nav.welcome a:not(:hover) {color: #ffffff;}
 			nav.welcome a:last-child {margin-left:80px;}
-			@media screen and (max-width: 815px){div.logo svg{width: 285px; height: 95px;} nav.welcome{top: 6%;} nav.welcome a{font-size: 14pt;} nav.welcome a:last-child{margin-left: 45px}nav.welcome a:focus {color: #01fff6;}nav.welcome a:not(:focus){color: #fffaaa;}input{max-width: 400px; align-items: center;} } 
+			@media screen and (max-width: 815px){div.logo svg{width: 285px; height: 95px;} nav.welcome{top: 6%;} nav.welcome a{font-size: 14pt;} nav.welcome a:last-child{margin-left: 45px}nav.welcome a:focus {color: #01fff6;}nav.welcome a:not(:focus){color: #fffaaa;}input, textarea{max-width: 400px; align-items: center;} } 
 			@media screen and (max-width: 485px){div.logo svg{width: 235px;} nav.welcome a{font-size: 13pt;}}
-			@media screen and (max-width: 415px) {div.logo svg{width: 185px; height:95px;}nav.welcome a{font-size: 12pt;} nav.welcome a:last-child{margin-left: 25px}  input{max-width: 200px;}}
+			@media screen and (max-width: 415px) {div.logo svg{width: 185px; height:95px;}nav.welcome a{font-size: 12pt;} nav.welcome a:last-child{margin-left: 25px}  input, textarea{max-width: 200px;}}
 			@media screen and (max-width: 315px){div.logo svg{width: 145px;}}
-			section.userInfo{display:flex; justify-content: center; position: relative; bottom: 320px; flex-wrap: wrap;}
+			section.userInfo, div.updateProfile{display:flex; flex-direction: column; align-content: center; position: relative; bottom: 150px; flex-wrap: wrap;}
 			div.input{text-align: center;}
 			div.firstmsg p{margin: 0 25% 10px;}
 			section#newuser p span{color: pink;}

@@ -4,5 +4,7 @@ const auth = require('../middleware/auth');
 const userControl = require('../controllers/user');
 router.post('/signup', userControl.signup);
 router.post('/login', userControl.login);
-
+router.put('/:id', userControl.modProfile);
+router.delete('/:id', userControl.deleteProfile);
+router.get('/:id', userControl.getProfile);
 module.exports = router;

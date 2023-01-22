@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const pool = require('../middleware/database');
 require("dotenv").config()
 exports.signup = async (req, res) => {
-    if ( typeof req.body !== null){
+    if ( typeof req.body !== null ){
         const body = req.body;
         // request is POST following preflight OPTION request
         await bcrypt.hash(body.password, 10).then( (encpass) => {
@@ -59,7 +59,7 @@ exports.login = async (req, res) => {
                                 console.log("password rejected for user " + body.email)
                                 return res.status(401).json( {"error":"Password incorrect"} )
                             } else {
-                                const token = jwt.sign({userId: userData[0].userID}, 'TOKEN_SECRET', {expiresIn: '24h'});
+                                const token = jwt.sign({userId: userData[0].userID}, process.env.TOKEN_SECRET, {expiresIn: '24h'});
                                 console.log(`Successful login by ${userData[0].userID}`)
                                 res.status(200).json({
                                     userId: userData[0].userID, token: token

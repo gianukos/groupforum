@@ -1,100 +1,18 @@
+import Main from "./Main.js";
 import InputEml from "./InputEml.js";
 import InputPwd from "./InputPwd.js";
-const appMain = `
-		<div id="headerNavMenu" >
-			<nav class="welcome" v-show="navLogin">
-				<a @click="showLogin()" href="#login">login</a>
-				<a @click="showSignup()" href="#signup">sign up</a>
-			</nav>
-			<nav class="welcome" v-show="!navLogin">
-				<a @click="profileExists() && showEdit()" href="#user">profile</a>
-				<a @click="logout" href="#">sign out</a>
-			</nav>
-		</div>
-		<section id="login" class="userInfo" >
-		<form v-show="route('login')" @submit.prevent novalidate="true">
-			<div class="input"> 
-				<h3>Login</h3>
-				<input :required="true" v-if="emailAddress" type="email" id="email" name="emailAddress" :value="emailAddress"  />
-				<input :required="true" v-else type="email" placeholder="Enter your email address" name="emailAddress" v-model.lazy="emailAddress"  />
-				<input :required="true" type="password" placeholder="Enter a password" name="pwd" v-model="inputPass"/>
-				<input type="button" class="submit" @click="submitLogin(validEmail(emailAddress), checkPass(inputPass))&&postLogin(emailAddress, inputPass)" value="Submit" />
-				<InputEml v-show=emailError></InputEml>
-				<InputPwd v-show=pwdError></InputPwd>
-				<div><p id="loginErr"></p></div>
-			</div>
-		</form>
-		</section>
-		<section id="signup" class="userInfo">
-		<form v-show="route('signup')" method="post">
-			<div class="input">
-				<h3>Sign up</h3>
-				<input type="email" name="email"  v-model="emailAddress" placeholder="Enter your email address"  required />
-				<input type="password" placeholder="Enter a password" name="pwd" v-model="inputPass" required />
-				<input type="button" class="submit"  @click="submitSignup(validEmail(emailAddress), checkPass(inputPass))&&postSignup(emailAddress, inputPass)" value="Submit"/>
-				<InputEml v-show=emailError></InputEml>
-				<InputPwd v-show=pwdError></InputPwd>
-				<div><p id="signupErr"></p></div>
-			</div>
-		</form>
-		</section>
-		<section id="newuser" class="userInfo">
-		<div class="input" v-show="route('newuser')">
-			<p>New account created</p>
-			<p>Login: <span>{{emailAddress}}</span></p>
-			<h4>Welcome!</h4>
-			<input type="button" class="button" @click="showLogin" value="Login" />
-		</div>
-		</section>
-		<section id="user" class="userInfo">
-		<div>
-		<div v-if="route('profile')">
-		<form type="submit">
-			<div class="input">
-				<h3>Edit profile<br>____________</h3>
-				<h4 class="edit">Your name</h4>
-				<p>current name: <span>{{profile.name}}</span></p>
-				<input v-model="edit.name" type="text" placeholder="Give yourself a username">
-				<h4 class="edit">Your story</h4>
-				<p>current bio: <br><span>{{profile.bio}}</span></p>
-				<div>
-					<textarea v-model="edit.bio" name="bio" id="bio" label="bio" placeholder="Include some information about yourself." spellcheck="true" rows="8" cols="70"></textarea><br>
-					<div><input type="button" class="submit" value="submit" @click="setProfile(edit.name, edit.bio)" /><input type="button" class="submit noedit" value="cancel edit" @click="getEaddr()&&onLogin()"/></div>
-				</div>
-				<h4 class="edit">Delete your account</h4>
-				<div>
-					<input type="button"  class="submit" value="Delete account" @click="router.push('delete')"/>
-				</div>
-			</div>
-		</form>
-		</div>
-		<div v-else>
-			<div v-show="!(route('login')||route('signup')||route('newuser')||route('delete'))" class="forumControls">
-				<input type="button" class="button" @click="showCreate" value="Create a post" />
-				<input type="button" class="button" @click="showPosts" value="Read group posts" />
-			</div>
-		</div>
-		</div>
-		<div v-show="route('delete')">
-			<div class="delete input">
-				<p>Is this "goodbye"?</p>
-				<input type="button"  class="submit" value="Yes, do it." @click="profileExists(false)"/>
-				<input type="button"  class="submit" value="Maybe not." @click="getEaddr()&&onLogin()"/>
-				<p id="accountClosed"></p>
-			</div>
-		</div>
-		<div v-show="route('onlogin')" class="input">
-			<p>{{onwelcome}}{{emailAddress}}</p>
-			<div><p id="dbresult"></p></div>
-		</div>
-		</section>
-	`;
+import CreatePosts from "./CreatePosts.js";
+import ReadPosts from "./ReadPosts.js";
+
+const appMain = Main.template;
 
 export default {
-	name: 'appMain',
+	name: 'App',
 	components: {
 		InputPwd,
-		InputEml
+		InputEml,
+		CreatePosts,
+		ReadPosts
 	},
 	data() {
 		return{
@@ -105,8 +23,9 @@ export default {
 		navLogin: true,
 		emailAddress: '',
 		inputPass: '',
+		encInput: '',
 		edit: {name:'', bio:''},
-		router: [],
+		router: ['home']
 		}
 	},
 	methods: {
@@ -115,15 +34,6 @@ export default {
 		},
 		route(section){
 			return this.router[this.view()] === section ? true : false ;
-		},
-		showLogin(){							
-			this.router.push("login");
-		},
-		showSignup(){							
-			this.router.push("signup");
-		},
-		showEdit(){
-			this.router.push("profile");
 		},
 		showCreate(){
 			if (!sessionStorage.getItem("sessionUser")){
@@ -134,6 +44,17 @@ export default {
 			if (!sessionStorage.getItem("sessionUser")){
 				this.router.push("login");
 			}
+		},
+		showLogin(){
+			if (!sessionStorage.getItem("sessionUser")){
+				this.router.push("login");
+			}							
+		},
+		showSignup(){							
+			this.router.push("signup");
+		},
+		showEdit(){
+			this.router.push("profile");
 		},
 		onSignup(){							
 			this.router.push("newuser")
@@ -249,7 +170,7 @@ export default {
 			const userID = sessionStorage.getItem('sessionUser');
 			const userToken = sessionStorage.getItem('sessionToken');
 			const userParams = JSON.parse(dataStr);
-			const requestOpts = { method:"PUT",  headers:{"Content-Type":"application/json"},  Authorization: "Bearer " + userToken, body:JSON.stringify(userParams)};
+			const requestOpts = { method:"PUT",  headers:{"Content-Type":"application/json",  "Authorization": "Bearer " + userToken}, body:JSON.stringify(userParams)};
 			(async () => {
 				const response = await fetch(this.endpoint + '/auth/' + userID, requestOpts).catch(	(error) => { return false })
 				if ( response.status === 200 ){
@@ -270,7 +191,7 @@ export default {
 			const userToken = sessionStorage.getItem('sessionToken');
 			var method = "";
 			method = state ? "GET" : "DELETE";
-			const requestOpts = { method:method, headers:{Authorization: "Bearer " + userToken} };
+			const requestOpts = { method:method,  headers:{"Content-Type":"x-www-form-urlencoded", "Authorization": "Bearer " + userToken}};
 			(async () => {
 				const response = await fetch(this.endpoint + '/auth/' + userID, requestOpts).catch(	(error) => { return false })
 				if ( response.status === 200  ){
@@ -278,8 +199,8 @@ export default {
 						const auth = await response.json();
 						localStorage.setItem("userName", auth.Name);
 						localStorage.setItem("userBio",  auth.Bio);
-						this.edit.name = '';
-						this.edit.bio = '';
+						this.edit.name = auth.Name;
+						this.edit.bio = auth.Bio;
 						this.profile = userID + '###' + auth.Name + '###' + auth.Bio ;
 					} else {
 						setTimeout(this.logout(), 15000)
@@ -290,7 +211,7 @@ export default {
 					if ( state === true ){
 						console.log( `could not retrieve name and bio for ${userID}`)
 					} else {
-						this.showEdit();
+						this.onLogin();
 						document.getElementById('dbresult').innerText = "Unable to delete account :  " +  response.statusText;
 					}					
 				}					
@@ -308,16 +229,29 @@ export default {
 				var name = localStorage.getItem("userName");
 				var bio = localStorage.getItem("userBio");
 				// replace null value with string
-				if(typeof(name)==='object'){name = 'none'};
-				if(typeof(bio)==='object'){bio = 'none'};
-				this.id = id; this.name = name; this.bio = bio;
+				if(typeof(name)==='object' || name === '' ){name = 'none'
+				};
+				if(typeof(bio)==='object'|| bio === '' ){bio = 'none'
+				};
+				this.id = id; this.bio = bio; this.name = name;
 				return this;
 			},
 			set(newValue){
 				[this.id, this.name, this.bio] = newValue.split('###');
-				console.log(this.name);
+				this.bio === '' ? this.bio = 'none' : false;
+				this.name === '' ? this.name = 'none' : false;
 			}
 		},
+	},
+	mounted() {
+		if (sessionStorage.getItem("sessionUser")&&this.emailAddress===''){
+			// page properties reloaded when user is logged in 
+			document.getElementsByClassName("welcome")[0].style.display  = 'none';
+			document.getElementsByClassName("welcome")[1].style.display  = 'flex';	
+			document.getElementById('user').style.display='flex';
+			this.router.push('onlogin');
+			this.emailAddress = sessionStorage.getItem('eaddr');
+		}
 	},
 	template: appMain
 };

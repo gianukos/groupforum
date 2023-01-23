@@ -1,6 +1,8 @@
 export default {
     name: 'ReadPosts',
-
+    // components: {
+    //     PostList
+    // },
     template: `
         <input type="button" class="button show" @click="showPosts" value="Read group posts" />
     `,

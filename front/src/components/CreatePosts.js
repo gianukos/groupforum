@@ -4,10 +4,10 @@ export default {
     components: {
         PostForm
     },
-    template: `
-        <input type="button" class="button show" @click="showCreate" :value=this.buttonVal />
-        <PostForm v-show="showForm"></PostForm>
-    `,
+    props: {
+        id: String,
+        name: String
+    },
     data(){
         return{
         showForm: false,
@@ -27,6 +27,10 @@ export default {
             }
         }
     },
+    template: `
+    <input type="button" class="button show" @click="showCreate" :value=this.buttonVal />
+    <PostForm v-show="showForm" :userID=this.id :userName=this.name></PostForm>
+    `,
     updated() {
         document.getElementById('postform').scrollIntoView({block: "start", inline:"nearest"});
     }

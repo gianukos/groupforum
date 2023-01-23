@@ -4,8 +4,6 @@
 		<meta charset="UTF-8"/>
 		<meta http-equiv="x-ua-compatible" content="ie-edge"/>
 		<meta name="viewport" content="width=device-width, height=device-height, viewport-fit=cover, initial-scale=1, minimum-scale=1, user-scalable=no" />
-		<!-- <script src="https://cdn.jsdelivr.net/npm/vue@3.2.45/dist/vue.global.min.js"></script> -->
-		<!-- <script src="https://unpkg.com/vue@next"></script> -->
 		<script src="https://unpkg.com/vue@next" integrity="sha384-Xiq8znLOjaGSxu5gTx+Fk76oy9X/3zkczEvNAJq6uSqcL1CRONmOFUPg1+WPFs+j" crossorigin="anonymous"></script>
 		<script src="./src/index.js"  type="module"></script>
 		<link rel="modulepreload" href="./src/components/app.js" crossorigin="anonymous">
@@ -29,7 +27,9 @@
 			header{display: block;  padding-bottom: 15px; border-bottom-color:purple; border-bottom-style:solid}
 			header div.logo{position: relative; margin-right: 55%;  display:block; z-index:1}
 			main.groupomania h1{color: pink; padding: 5rem 5rem; font-size: 32pt; position: relative; right: 24px; display:block; z-index:1}
-			h4.edit, p#dbresult{color: pink; padding: 1rem 1rem; font-size: 18pt;}
+			h4.edit, p#dbresult, p#dbpostresult{color: pink; padding: 1rem 1rem; font-size: 18pt;}
+			label h4{color: pink; margin-top: 1.5rem;}
+			span.edit{color: pink; padding: 1rem 0 .5rem; font-size: 12pt;}
 			h5.edit {color: pink; padding: 1rem 1rem; font-size: 14pt; border-top: solid #f0d3d8 1px;}
 			nav.welcome{position: absolute; left: 65%; top: 5%; display: flex; flex-wrap: nowrap;}
 			nav.welcome a {font-size: 18pt; color:white; text-decoration:none; transition: color .4s ease-out; display:block; z-index:1; position: relative;}
@@ -46,10 +46,9 @@
 			div.firstmsg p{margin: 0 25% 10px;}
 			section#newuser p span{color: pink;}
 			input{height: 48px; width: 800px; margin: 10px 300px;}
-		
-			input.submit, input.button{width: 10rem; border-radius: 10px; border: 3px outset #38287c; color: #27087a; font-weight: 600; background-color: #dbf1f5; font-size: .9rem;  transition: background-color .4s ease-in-out;}
-			input.submit:hover, input.button:hover { background-color: #c3dee2;}
-			input.submit:not(:hover), input.button:not(:hover) { background-color:#dbf1f5; }
+			input.submit, input.button{width: 10rem; border-radius: 10px; border: 3px outset #38287c; color: #27087a; font-weight: 600; background-color: #dbf1f5; font-size: .9rem;  transition: background-color box-shadow .4s ease-in-out;}
+			input.submit:hover, input.button:hover { background-color: #afe5ee;   box-shadow: 0 1px 2px #00000099}
+			input.submit:not(:hover), input.button:not(:hover) { background-color:#dbf1f5; box-shadow: none;}
 			input.file{width: 16rem; background-color: blue; color:white;  border-radius:6px; border: solid #38287c 1px; height: 1.5em; width: 14em;}
 			div.postform {padding: 85px 0 85px 0;} 
 			footer{height: 3%; width: 100%; border-top-color:purple;border-top-style:solid;}

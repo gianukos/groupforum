@@ -5,4 +5,4 @@ Please look at
 
 * [README file](./back/README.md) for back-end
 
-* [README file](./front/README.md)) for front-end
+* [README file](./front/README.md) for front-end

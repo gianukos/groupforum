@@ -1,12 +1,14 @@
+import ReadPosts from "./ReadPosts.js";
 import PostForm from "./PostForm.js";
 export default {
     name: 'CreatePosts',
     components: {
+        ReadPosts,
         PostForm
     },
     props: {
-        id: String,
-        name: String
+        userID: String,
+        userName: String
     },
     data(){
         return{
@@ -15,24 +17,18 @@ export default {
         }
     },
     methods: {
-        showCreate() {
-            if (!sessionStorage.getItem("sessionUser")){
-                console.log("Component CreatePosts")
-			}else{
-                var myuser = sessionStorage.getItem('sessionUser');
-                console.log(`${myuser} will click here to create posts`)
-                this.showForm = !this.showForm;
-                this.buttonVal = ( this.showForm ? "Cancel posting" : "Create a post" );
-                
-            }
+        showButton() {
+            this.showForm = !this.showForm;
+            this.buttonVal = ( this.showForm ? "Cancel posting" : "Create a post" );
         }
     },
     template: `
-    <input type="button" class="button show" @click="showCreate" :value=this.buttonVal />
-    <PostForm v-show="showForm" :userID=this.id :userName=this.name></PostForm>
+    <input type="button" class="button show" @click="showButton" :value=this.buttonVal />
+    <ReadPosts></ReadPosts>
+    <PostForm v-show="this.showForm" :userID="this.userID" :userName="this.userName"></PostForm>
     `,
     updated() {
-        document.getElementById('postform').scrollIntoView({block: "start", inline:"nearest"});
+        document.getElementById('forumsections').scrollIntoView({block: "start", inline:"nearest"});
     }
 
 }

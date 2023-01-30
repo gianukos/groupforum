@@ -13,7 +13,7 @@ exports.signup = async (req, res) => {
                 password:encpass,
                 bio:body.bio
             };
-        var sql = 'SELECT * FROM users WHERE email = ?'
+        let sql = 'SELECT * FROM users WHERE email = ?'
         pool.query(
             sql,
             [body.email],
@@ -24,7 +24,7 @@ exports.signup = async (req, res) => {
                 if (userData.length > 0 && userData.rowCount != 0){
                     res.status(400).json("registered user");
                 } else {
-                        var sql = 'INSERT INTO users(name, email, password, bio) VALUES ( ?, ?, ?, ? )'
+                        let sql = 'INSERT INTO users(name, email, password, bio) VALUES ( ?, ?, ?, ? )'
                         pool.query(
                             sql,
                             [user.name, user.email, user.password, user.bio],
@@ -44,7 +44,7 @@ exports.login = async (req, res) => {
     if ( typeof req.body !== null){
         const body = req.body;
         // request is POST following preflight OPTION request
-        var sql = 'SELECT * FROM users WHERE email = ?'
+        let sql = 'SELECT * FROM users WHERE email = ?'
         pool.query(
             sql,
             [body.email],
@@ -76,7 +76,7 @@ exports.login = async (req, res) => {
 exports.modProfile = async (req, res) => {
     if ( typeof req.body !== null){
         const body = req.body;
-        var sql = 'SELECT * FROM users WHERE userID = ?'
+        let sql = 'SELECT * FROM users WHERE userID = ?'
         pool.query(
             sql,
             [req.params.id],
@@ -105,7 +105,7 @@ exports.modProfile = async (req, res) => {
     }
 };
 exports.getProfile = async (req, res) => {
-    var sql = 'SELECT * FROM users WHERE userID = ?'
+    let sql = 'SELECT * FROM users WHERE userID = ?'
     pool.query(
         sql,
         [req.params.id],
@@ -123,7 +123,7 @@ exports.getProfile = async (req, res) => {
     })
 };
 exports.deleteProfile = async (req, res) => {
-    var sql = `DELETE FROM users WHERE userid = ?`
+    let sql = `DELETE FROM users WHERE userid = ?`
     pool.query(
         sql,
         [req.params.id],

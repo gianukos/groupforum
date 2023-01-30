@@ -44,13 +44,32 @@ exports.createPost = async (req, res) => {
         )
     }
 }
-// exports.readPost = async (req, res) => {
-//     if ( typeof req.body !== null ){
-//         const body = req.body;
-//         var sql = 'SELECT * FROM users WHERE postID = ?'
-//         pool.query(
-//             sql,
-//             [body.id]
-//         )
-//     }
-// }
+exports.recentPost = async (req, res) => {
+    let sql = 'select topic, time_created from posts where userID = ? order by time_created desc limit ' + req.query.p 
+    pool.query(
+        sql,
+        [req.params.id],
+        (error, userData) => {
+            if (error){
+                return res.status(401).json({error: error});
+            }else if( userData.length > 0 && userData.rowCount != 0 ){
+                limit = 'more';
+                if ( userData.length == req.query.p ){
+                    result = req.query.p - 1
+                } else {
+                    limit = 'end';
+                    result = userData.length - 1;
+                }
+                pd = `${userData[result].time_created}`.split(' ')
+                postdate = pd[0] + ' ' + pd[1] + ' ' +  pd[2] + ' ' + pd[4];
+                console.log(`Data requested for user: ${req.params.id} ${postdate}`)
+                res.status(200).json({
+                    Topic:userData[result].topic, Date:postdate, Limit:limit
+                });
+            } else {
+                if ( userData.length === 0 ) {
+                    res.status(204)
+            }
+        }
+    })
+};

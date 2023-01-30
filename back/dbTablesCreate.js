@@ -31,8 +31,8 @@ connection.query(
         url varchar(100) DEFAULT NULL,
         topic varchar(100) NOT NULL,
         description varchar(5000) NOT NULL,
-        time_created timestamp NULL DEFAULT NULL,
-        likes JSON NOT NULL,
+        time_created datetime DEFAULT CURRENT_TIMESTAMP,
+        likes JSON DEFAULT NULL,
         PRIMARY KEY (postID),
         KEY fk_user (userID),
         CONSTRAINT fk_user FOREIGN KEY (userID) REFERENCES users (userID) ON DELETE CASCADE
@@ -49,7 +49,7 @@ connection.query(
       userID varchar(36) NOT NULL,
       name varchar(100) NOT NULL,
       comment varchar(5000) NOT NULL,
-      time_created timestamp NULL DEFAULT NULL,
+      time_created timestamp DEFAULT CURRENT_TIMESTAMP,
       time_modified timestamp NULL DEFAULT NULL,
       PRIMARY KEY (commentID),
       KEY fk_comment (userID),
@@ -64,7 +64,7 @@ connection.query(
       'show tables' , function(err, result, fields){
         console.log("'show tables' query")
         console.log("Number of tables: " + result.length + "\n" + fields[0].table)
-        for (var c = 0; c < result.length; c++){ console.log(result[c].Tables_in_groupomania)}
+        for (let c = 0; c < result.length; c++){ console.log(result[c].Tables_in_groupomania)}
         connection.end((err) => {err && console.log("Error closing connections to connection: " + err)}
         )
       })

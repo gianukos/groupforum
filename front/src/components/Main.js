@@ -19,6 +19,7 @@ export default {
             :required="true"
             v-if="emailAddress"
             type="email"
+            class="email"
             autocomplete="email"
             id="email"
             name="emailAddress"
@@ -28,6 +29,7 @@ export default {
             :required="true"
             v-else
             type="email"
+            class="email"
             autocomplete="email"
             placeholder="Enter your email address"
             name="emailAddress"
@@ -36,6 +38,7 @@ export default {
           <input
             :required="true"
             type="password"
+            class="password"
             autocomplete="current-password"
             placeholder="Enter a password"
             name="pwd"
@@ -59,6 +62,7 @@ export default {
           <h3>Sign up</h3>
           <input
             type="email"
+            class="email"
             autocomplete="email"
             name="email"
             v-model="emailAddress"
@@ -67,6 +71,7 @@ export default {
           />
           <input
             type="password"
+            class="password"
             autocomplete="new-password"
             placeholder="Enter a password"
             name="pwd"
@@ -100,7 +105,7 @@ export default {
             <div class="input">
               <h3>Edit profile<br />____________</h3>
               <h4 class="edit">Your name</h4>
-              <p>current name: <span>{{profile.name}}</span></p>
+              <p>current name: <span>{{profile.pname}}</span></p>
               <input
                 v-model="edit.name"
                 type="text"
@@ -154,11 +159,10 @@ export default {
         <div v-else>
           <div
             v-show="!(route('login')||route('signup')||route('newuser')||route('delete')||route('home'))"
-            class="forumControls"
-            id="postform"
+            class="forumsections"
+            id="forumsections"
           >
-            <CreatePosts :id="profile.id" :name="profile.name"></CreatePosts>
-            <ReadPosts></ReadPosts>
+            <ForumButtons :userID="profile.id" :userName="profile.pname"></ForumButtons>
           </div>
         </div>
       </div>
@@ -185,5 +189,6 @@ export default {
         <div><p id="dbresult"></p></div>
       </div>
     </section>
+    <ScrollButton></ScrollButton>
 `
 }

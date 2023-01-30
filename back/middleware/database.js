@@ -3,7 +3,7 @@ const util = require("util");
 require("dotenv").config();
 
 
-var mysql = require("mysql")
+let mysql = require("mysql")
 
 const groupomaniaPoolConfig = {
   connectionLimit: 10,

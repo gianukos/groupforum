@@ -12,34 +12,41 @@ export default {
         userName: String
     },
     methods: {
+        setEdit(prop, val){
+            this.edit.prop = val;
+        },
         postForm( idParam, nameParam, topicParam, descParam, urlParam ){
             var dataStr = `{"id":"${idParam}", "name":"${nameParam}", "topic":"${topicParam}", "description":"${descParam}", "url":"${urlParam}"}`;
-            console.log(dataStr);
             const userToken = sessionStorage.getItem('sessionToken');
             const postParams = JSON.parse(dataStr);
 			const requestOpts = { method:"POST",  headers:{"Content-Type":"application/json", "Authorization": "Bearer " + userToken}, body:JSON.stringify(postParams)};
             (async () => {
                 const response = await fetch(this.endpoint + "/posts/create", requestOpts).catch(	(error) => { return false })
                 const body = await response.json();
+                const dbpostresult = document.getElementById('dbpostresult');
+                dbpostresult.scrollIntoView({block: "start", inline:"center"});
                 if ( response.status === 200 ){
-                    document.getElementById('dbpostresult').innerText = "Post created!"
+                    dbpostresult.innerText = "Post created!"
                 } else if ( response.status === 400) {
                     if (body.error === "duplicate post"){
-                        document.getElementById('dbpostresult').innerText = "Sorry: " + body.error;
+                        this.edit.topic = '';
+                        this.edit.desc = '';
+                        dbpostresult.innerText = "Sorry: " + body.error;
                     }
                 }else{
-					document.getElementById('dbpostresult').innerText = "Please try again :  " +  response.statusText;
+					dbpostresult.innerText = "Please try again :  " +  response.statusText;
 				}
-            })(); 
+            })();
         }
     },
     template: `
+    <section>
     <div class="postform">
     <div class="input"> 
     <form type="submit">
         <h3>New Post<br>____________</h3>
-        <h4 class="edit">Create a post</h4>
-        <input v-model="edit.topic" type="text" name="topic" placeholder="Give your post a title" @click="this.edit.title='false'">
+        <label for="topic"><h4 class="edit">Create a post</h4></label>
+        <input v-model="edit.topic" type="text" name="topic" id="topic" placeholder="Give your post a title" maxlength=100>
         <label for="description"><h4 class="edit">Description of post</h4></label>
         <div>
             <textarea v-model="edit.desc" name="description" id="description" label="description" placeholder="Describe the content of your post" spellcheck="true" rows="8" cols="70"></textarea><br>
@@ -70,9 +77,6 @@ export default {
     </form>        
     </div>
     </div>
-    `,
-    style: `
-        div.show{visibility: none;}
-        
+    </section>
     `
 }

@@ -1,8 +1,8 @@
 import Main from "./Main.js";
 import InputEml from "./InputEml.js";
 import InputPwd from "./InputPwd.js";
-import CreatePosts from "./CreatePosts.js";
-import ReadPosts from "./ReadPosts.js";
+import ForumButtons from "./ForumButtons.js";
+import ScrollButton from "./ScrollButton.js";
 
 const appMain = Main.template;
 
@@ -11,8 +11,8 @@ export default {
 	components: {
 		InputPwd,
 		InputEml,
-		CreatePosts,
-		ReadPosts
+		ForumButtons,
+		ScrollButton
 	},
 	data() {
 		return{
@@ -35,18 +35,8 @@ export default {
 		route(section){
 			return this.router[this.view()] === section ? true : false ;
 		},
-		showCreate(){
-			if (!sessionStorage.getItem("sessionUser")){
-				this.router.push("login");
-			}
-		},
-		showPosts(){
-			if (!sessionStorage.getItem("sessionUser")){
-				this.router.push("login");
-			}
-		},
 		showLogin(){
-			if (!sessionStorage.getItem("sessionUser")){
+			if (!this.profile.id){
 				this.router.push("login");
 			}							
 		},
@@ -100,7 +90,7 @@ export default {
 			}
 		},
 		validEmail(email) {
-			var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+			let re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 			return re.test(email);
 		},
 		checkPass(password) {
@@ -113,14 +103,14 @@ export default {
 			}
 		},
 		logout(){
-			var storedUser = sessionStorage.getItem("sessionUser") 
+			let storedUser = sessionStorage.getItem("sessionUser") 
 			sessionStorage.clear();
 			window.location.href = window.location.origin + "/index.html";
 			setTimeout(console.log(this.appName + " has restarted   [" + storedUser + " log out]" ), 7500)
 			storedUser = null
 		},
 		postSignup(emailParam, passwordParam){
-			var dataStr = `{"name":"", "email":"${emailParam}", "password":"${passwordParam}", "bio":"" }`;
+			let dataStr = `{"name":"", "email":"${emailParam}", "password":"${passwordParam}", "bio":"" }`;
 			const signupParams = JSON.parse(dataStr);
 			const requestOpts = { method:"POST",  headers:{"Content-Type":"application/json"}, body:JSON.stringify(signupParams)};
 			console.log(requestOpts.body)
@@ -142,18 +132,18 @@ export default {
 			)
 		},
 		postLogin(emailParam, passwordParam){
-			var dataStr = `{ "email":"${emailParam}", "password":"${passwordParam}" }`;
+			let dataStr = `{ "email":"${emailParam}", "password":"${passwordParam}" }`;
 			const loginParams = JSON.parse(dataStr);
 			const requestOpts = { method:"POST",  headers:{"Content-Type":"application/json"}, body:JSON.stringify(loginParams)};
 			(async () => {
 				const response = await fetch(this.endpoint + "/auth/login", requestOpts).catch(	(error) => { return false })
-				if ( response.status === 200 ){									
-					this.onLogin();
+				if ( response.status === 200 ){							
 					const auth = await response.json();
+					this.profile = auth.userId + '###' + '' + '###' + '';		
 					sessionStorage.setItem("sessionUser", auth.userId)
 					sessionStorage.setItem("sessionToken", auth.token)
 					sessionStorage.setItem("eaddr", this.emailAddress)
-							
+					this.onLogin();
 				}else{
 					this.route("login")||this.showLogin()
 					if (response.status === 401 ){
@@ -166,7 +156,7 @@ export default {
 			})(); 
 		},
 		setProfile(nameParam, bioParam){
-			var dataStr = `{ "name":"${nameParam}", "bio":"${bioParam}" }`;
+			let dataStr = `{ "name":"${nameParam}", "bio":"${bioParam}" }`;
 			const userID = sessionStorage.getItem('sessionUser');
 			const userToken = sessionStorage.getItem('sessionToken');
 			const userParams = JSON.parse(dataStr);
@@ -174,8 +164,15 @@ export default {
 			(async () => {
 				const response = await fetch(this.endpoint + '/auth/' + userID, requestOpts).catch(	(error) => { return false })
 				if ( response.status === 200 ){
-					localStorage.setItem("userName", nameParam); 
-					localStorage.setItem("userBio",  bioParam);
+					if (! localStorage.getItem(userID) ){
+						localStorage.setItem( userID, JSON.stringify( {uid:{}} ))
+					}
+					const luser = JSON.parse(localStorage.getItem(userID));
+					luser.uid.userName = nameParam;
+					luser.uid.userBio = bioParam;
+					localStorage.setItem(userID, JSON.stringify(luser));
+					this.edit.name = nameParam;
+					this.edit.bio = bioParam;
 					this.profile = userID + '###' + nameParam + '###' + bioParam;
 					this.onLogin();
 					this.emailAddress = sessionStorage.getItem('eaddr');
@@ -189,7 +186,7 @@ export default {
 		profileExists(state=true){
 			const userID = sessionStorage.getItem('sessionUser');
 			const userToken = sessionStorage.getItem('sessionToken');
-			var method = "";
+			let method = "";
 			method = state ? "GET" : "DELETE";
 			const requestOpts = { method:method,  headers:{"Content-Type":"x-www-form-urlencoded", "Authorization": "Bearer " + userToken}};
 			(async () => {
@@ -197,15 +194,20 @@ export default {
 				if ( response.status === 200  ){
 					if ( state === true ){
 						const auth = await response.json();
-						localStorage.setItem("userName", auth.Name);
-						localStorage.setItem("userBio",  auth.Bio);
+						if (! localStorage.getItem(userID) ){
+							localStorage.setItem( userID, JSON.stringify( {uid:{}} ))
+						}
+						const luser = JSON.parse(localStorage.getItem(userID));
+						luser.uid.userName = auth.Name;
+						luser.uid.userBio = auth.Bio;
+						localStorage.setItem(userID, JSON.stringify(luser));
 						this.edit.name = auth.Name;
 						this.edit.bio = auth.Bio;
 						this.profile = userID + '###' + auth.Name + '###' + auth.Bio ;
 					} else {
 						setTimeout(this.logout(), 15000)
 						document.getElementById("accountClosed").innerText = "Account is deleted.  About to signout of the app."
-						localStorage.clear();
+						localStorage.removeItem(userID);
 					}
 				}else{
 					if ( state === true ){
@@ -225,21 +227,28 @@ export default {
 		},
 		profile: {
 			get(){
-				var id = sessionStorage.getItem("sessionUser");
-				var name = localStorage.getItem("userName");
-				var bio = localStorage.getItem("userBio");
+				let id = sessionStorage.getItem("sessionUser");
+				if(typeof(id) !== 'object'){
+					let localID = localStorage.getItem(id);
+					let pname = JSON.parse(localID).uid.userName;
+					let bio = JSON.parse(localID).uid.userBio;	
+					this.id = id; this.bio = bio; this.pname = pname;			
+				} else {
+					id = ''
+					let pname = '';
+					let bio = '';
+					this.id = id; this.bio = bio; this.pname = pname;
+				}
 				// replace null value with string
-				if(typeof(name)==='object' || name === '' ){name = 'none'
-				};
-				if(typeof(bio)==='object'|| bio === '' ){bio = 'none'
-				};
-				this.id = id; this.bio = bio; this.name = name;
+				this.bio === '' ? this.bio = 'none' : false;
+				this.pname === '' ? this.pname = 'none' : false;
+				this.id = id;
 				return this;
 			},
 			set(newValue){
-				[this.id, this.name, this.bio] = newValue.split('###');
+				[this.id, this.pname, this.bio] = newValue.split('###');
 				this.bio === '' ? this.bio = 'none' : false;
-				this.name === '' ? this.name = 'none' : false;
+				this.pname === '' ? this.pname = 'none' : false;
 			}
 		},
 	},

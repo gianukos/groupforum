@@ -49,27 +49,29 @@
 			input.submit:hover, input.button:hover { background-color: #afe5ee;   box-shadow: 0 1px 2px #00000099}
 			input.submit:not(:hover), input.button:not(:hover) { background-color:#dbf1f5; box-shadow: none;}
 			input.file{width: 16rem; background-color: blue; color:white;  border-radius:6px; border: solid #38287c 1px; height: 1.5em; width: 14em;}
-			section.recent{display: flex; flex-direction:row; flex-wrap: wrap; justify-content: center; position: relative; bottom: 85px; text-align: center }
+			section.recent{display: flex; flex-direction:row; flex-wrap: wrap; justify-content: center; position: relative; bottom: 185px; text-align: center }
 			div.recent { font-size: 11pt; font-weight: 600; padding: 5px; border: .5px solid #afe5ee; border-right-style: none; border-left-style: none;  }
 			div.recent span{padding-left: 6px; flex-wrap: inherit;}
 			div.recent a{color:#dbf1f5;}
-			button.recent{border-radius:15px;}
+			button.recent{border-radius:15px; margin-bottom: 15px;}
+			button.preview{ margin-top: 10px; border-radius:5px; font-size: 9pt; background-color:#afe5ee;}
+			div.preview.text{font-size: 10pt; font-weight: 400; margin-top: 3px;}
 			div.postform {padding: 55px 0 ;} 
-			div.scrollto{border: 3px double rgb(102, 0, 128);  padding: 6px; border-radius: 25%; font-family:Tahoma; font-size:9pt; background-color: #040e60; width: 30px; height: 30px; margin: 0 0 150px 70%; opacity: 0.75;}
-			div.scrollto a{color:#f0d3d8; text-decoration: none; padding:.5px }
-			div.scrollto:hover{color: white; font-weight:500; font-size:9.3pt; opacity: .95;}
+			a.scrollto{text-decoration: none;}
+			div.scrollto{color:#f0d3d8; text-decoration: none; box-shadow: 0 1px 2px #660080;  padding: 6px; border-radius: 25%;  font-size:14pt; background-color: #172174; width: 28px; height: 28px; margin: 0 0 150px 70%; opacity: 0.75; transition: font-size  6.4s ease-in-out; transition: box-shadow  6.4s ease-in-out;}
+			div.scrollto:hover{color: white; font-weight:500; font-size:14.5pt;  box-shadow: 0 2px 3px #280331; opacity: .95;}
 			footer{height: 16px; width: 100%; border-top-color:purple; border-top-style:solid;}
 			footer hr{opacity: 0; margin-top: 5%;}
-			@media screen and (max-width: 1535px){}
-			@media screen and (max-width: 815px){div.logo svg{width: 285px; height: 95px;} nav.welcome{top: 6%;} nav.welcome a{font-size: 14pt;} nav.welcome a:last-child{margin-left: 45px}nav.welcome a:focus {color: #01fff6;}nav.welcome a:not(:focus){color: #fffaaa;}input, textarea, div.recent {max-width: 400px; align-items: center;} } 
-			@media screen and (max-width: 485px){div.logo svg{width: 235px;} nav.welcome a{font-size: 13pt;} div.scrollto{visibility:hidden} }
-			@media screen and (max-width: 415px) {div.logo svg{width: 185px; height:95px;}nav.welcome a{font-size: 12pt;} nav.welcome a:last-child{margin-left: 25px}  input, textarea{max-width: 200px;}}
+			@media screen and (max-width: 1535px){input, textarea, div.recent {max-width: 400px;  align-items: center;}}
+			@media screen and (max-width: 815px){div.logo svg{width: 285px; height: 95px;} nav.welcome{top: 6%;} nav.welcome a{font-size: 14pt;} nav.welcome a:last-child{margin-left: 45px}nav.welcome a:focus {color: #01fff6;}nav.welcome a:not(:focus){color: #fffaaa;}input, textarea, div.recent {max-width: 400px;} } 
+			@media screen and (max-width: 485px){div.logo svg{width: 235px;} nav.welcome a{font-size: 13pt;}}
+			@media screen and (max-width: 415px) {div.logo svg{width: 185px; height:95px;}nav.welcome a{font-size: 12pt;} nav.welcome a:last-child{margin-left: 25px}  input, textarea, div.recent{max-width: 200px;}}
 			@media screen and (max-width: 315px){div.logo svg{width: 145px;}}
 		</style>
 	</head>
 	<body>
 		<header>
-			<div class="logo" id="logo">
+			<div class="logo" id="logo" alt="logo of Groupomania">
 				<svg data-v-5f19e91b="" xmlns="http://www.w3.org/2000/svg" width="485" height="78" viewBox="0 0 485 78">
 					<!---->
 					<!---->
@@ -89,7 +91,7 @@
 			</div>
 		</header>
 		<main class="groupomania">
-			<h1>web forum</h1>
+			<h1 title="Groupomania social network">web forum</h1>
 
 			<div class="bg" 
 					<svg data-v-1084b650="" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">

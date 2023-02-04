@@ -139,7 +139,7 @@ export default {
 				const response = await fetch(this.endpoint + "/auth/login", requestOpts).catch(	(error) => { return false })
 				if ( response.status === 200 ){							
 					const auth = await response.json();
-					this.profile = auth.userId + '###' + '' + '###' + '';		
+					this.profile = auth.userId + '###' + auth.name + '###' + auth.bio;		
 					sessionStorage.setItem("sessionUser", auth.userId)
 					sessionStorage.setItem("sessionToken", auth.token)
 					sessionStorage.setItem("eaddr", this.emailAddress)
@@ -228,13 +228,12 @@ export default {
 		profile: {
 			get(){
 				let id = sessionStorage.getItem("sessionUser");
-				if(typeof(id) !== 'object'){
+				if(typeof(id) !== 'object' && typeof(localStorage.getItem(id)) !== 'object'){
 					let localID = localStorage.getItem(id);
 					let pname = JSON.parse(localID).uid.userName;
 					let bio = JSON.parse(localID).uid.userBio;	
 					this.id = id; this.bio = bio; this.pname = pname;			
 				} else {
-					id = ''
 					let pname = '';
 					let bio = '';
 					this.id = id; this.bio = bio; this.pname = pname;

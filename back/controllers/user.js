@@ -62,7 +62,7 @@ exports.login = async (req, res) => {
                                 const token = jwt.sign({userId: userData[0].userID}, process.env.TOKEN_SECRET, {expiresIn: '24h'});
                                 console.log(`Successful login by ${userData[0].userID}`)
                                 res.status(200).json({
-                                    userId: userData[0].userID, token: token
+                                    userId: userData[0].userID, name: userData[0].name, bio: userData[0].bio, token: token
                                 });
                             }
                         }
@@ -105,6 +105,7 @@ exports.modProfile = async (req, res) => {
     }
 };
 exports.getProfile = async (req, res) => {
+    // route requested by click on text 'profile' in page header
     let sql = 'SELECT * FROM users WHERE userID = ?'
     pool.query(
         sql,

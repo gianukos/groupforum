@@ -1,6 +1,6 @@
-<!-- main.html represents template option in src/components/Main.js to allow viewing of text and editing -->
-<!-- not included at runtime -->
-<!--  -->
+<!-- main.html represents the template exported by src/components/Main.js -->
+<!-- code here allows viewing or editing of the JavaScript component with HTML syntax highlighted -->
+<!-- this file is not required to build or run the app -->
     <div id="headerNavMenu">
       <nav class="welcome" v-show="navLogin">
         <a @click="showLogin()" href="#login">login</a>
@@ -12,7 +12,7 @@
       </nav>
     </div>
     <section id="login" class="userInfo">
-      <form v-show="route('login')" @submit.prevent novalidate="true">
+      <form v-show="route('login')" @submit.prevent novali="true">
         <div class="input">
           <h3>Login</h3>
           <input

@@ -1,6 +1,4 @@
-import PostComment from "./PostComment.js";
 export default {
-    name: PostList,
-    components: {PostComment} ,
-    template:``
+    name: 'PostList',
+    template:`<div>PostList component says 'hello'</div>`
 }

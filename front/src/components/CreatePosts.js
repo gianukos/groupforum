@@ -16,16 +16,21 @@ export default {
         buttonVal: "Create a post"
         }
     },
+    emits: ['displayList'],
     methods: {
         showButton() {
             this.showForm = !this.showForm;
             this.buttonVal = ( this.showForm ? "Cancel posting" : "Create a post" );
+        },
+        showPosts() {
+            // relays to parent ForumButtons event emitted by child ReadPosts
+            this.$emit('displayList')
         }
     },
     template: `
-    <input type="button" class="button show" @click="showButton" :value=this.buttonVal />
-    <ReadPosts></ReadPosts>
-    <PostForm v-show="this.showForm" :userID="this.userID" :userName="this.userName"></PostForm>
+        <input type="button" class="button show" @click="showButton" :value=this.buttonVal />
+        <ReadPosts @display-list="showPosts"></ReadPosts>
+        <PostForm v-show="this.showForm" :userID="this.userID" :userName="this.userName"></PostForm>
     `,
     updated() {
         document.getElementById('forumsections').scrollIntoView({block: "start", inline:"nearest"});

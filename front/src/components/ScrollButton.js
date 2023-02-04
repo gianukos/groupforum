@@ -1,9 +1,7 @@
 export default{
     name: 'ScrollButton',
     template: `
-    <div class="scrollto" v-if="this.scrollUp>500">
-    <a href="#logo">scroll up</a>
-    </div>
+    <a class="scrollto" href="#logo"><div title="Back to Top" class="scrollto" v-if="this.scrollUp>500">&#11014;</div></a>
     `,
     data() {
         return {

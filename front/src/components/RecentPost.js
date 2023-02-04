@@ -20,7 +20,8 @@ export default {
             <button type="button" class="button recent" @click="showRecent">{{buttonval}}</button>
             <div>
             <span>{{latest}}</span><span v-if="this.userName!=='none'&&latest.length>0">{{this.userName}}</span>
-            <span v-else v-show="latest.length>0">!</span><a href="#recent">
+            <span v-else v-show="latest.length>0">!</span>
+            <a href="#recent" @click="this.$emit('viewSingle')">
             <span id="recentTopic">{{previews.Topic}}</span>
             <span id="recentName">{{previews.name}}</span></a>
             <span id="recentDate">{{previews.Date}}</span></div>

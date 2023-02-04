@@ -1,4 +1,4 @@
 export default {
-    name: PostComment,
+    name: 'PostComment',
     template: ``
 }

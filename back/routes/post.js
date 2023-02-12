@@ -5,4 +5,6 @@ const auth = require('../middleware/auth');
 const postControl = require('../controllers/posts');
 router.post('/create', auth, postControl.createPost);
 router.get('/recent/:id', auth, postControl.recentPost);
+router.get('/posts/', auth, postControl.allPosts);
+router.get('/image', auth, postControl.getFile);
 module.exports = router;

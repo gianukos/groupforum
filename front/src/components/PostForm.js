@@ -24,7 +24,7 @@ export default {
             } else {
                 this.edit.filepath = `${tmpname.slice(0, tmpname.lastIndexOf('.'))}.${Date.now()}.${extension}`;
                 Object.defineProperty(select, "name" , {value: this.edit.filepath})
-                console.log(select.name)
+                console.log('Selected file ' + select.name)
             }
             reader.addEventListener("load", () => {
                 this.edit.file =  reader.result 

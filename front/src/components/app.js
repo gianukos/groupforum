@@ -113,7 +113,6 @@ export default {
 			let dataStr = `{"name":"", "email":"${emailParam}", "password":"${passwordParam}", "bio":"" }`;
 			const signupParams = JSON.parse(dataStr);
 			const requestOpts = { method:"POST",  headers:{"Content-Type":"application/json"}, body:JSON.stringify(signupParams)};
-			console.log(requestOpts.body)
 			fetch(this.endpoint + "/auth/signup", requestOpts)
 				.then(response => response.text()) 					
 				.then((responseAddr) => {

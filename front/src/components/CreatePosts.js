@@ -23,7 +23,7 @@ export default {
             this.buttonVal = ( this.showForm ? "Cancel posting" : "Create a post" );
         },
         showPosts() {
-            // relays to parent ForumButtons event emitted by child ReadPosts
+            // emits to parent ForumButtons event emitted by child ReadPosts
             this.$emit('displayList')
         }
     },

@@ -1,17 +1,21 @@
 ## ocP7 
 
-The front-end client uses a MySql database to store information about accounts
-and user activity on the app.
-A back-end server and middleware connect to the Groupomania database.
+The front-end client uses a MySql database to store information about accounts and user activity on the app.
 
-### Using the Express app from a console
+A back-end server and middleware connect to the Groupomania database as user 'root' on the default port. Before a connection can be made the database server must be running on the localhost.
 
-* Change to `P7/back` directory
+#### Using the Express app from a console
 
-* Install dependencies first by running `npm install`
+* Change directory    
+    `$ cd ocP7/back`
 
-* To create a database named `groupomania` and three tables run `node dbTablesCreate.js`.
-    
+* Install dependencies    
+    `$ npm install`
+
 * Assign values to environment variables in `.env` file
 
-* `npm run start` will start the app
+* Run script to create a database named `groupomania` and three tables   
+    `$ node dbTablesCreate.js`.
+
+* start the app    
+    `$ npm run start` 

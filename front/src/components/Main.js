@@ -1,19 +1,19 @@
 export default {
     name: 'Main',
     template: `
-    <div id="headerNavMenu">
-      <nav class="welcome" v-show="navLogin">
+    <div id="headerNavMenu" role="navigation">
+      <nav class="welcome" v-show="navLogin" aria-label="login">
         <a @click="showLogin()" href="#login">login</a>
         <a @click="showSignup()" href="#signup">sign up</a>
       </nav>
-      <nav class="welcome" v-show="!navLogin">
+      <nav class="welcome" v-show="!navLogin" aria-label="logout">
         <a @click="profileExists()&&showEdit()" href="#user">profile</a>
         <a @click="logout" href="#">sign out</a>
       </nav>
     </div>
     <section id="login" class="userInfo">
       <form v-show="route('login')" @submit.prevent novalidate="true">
-        <div class="input">
+        <div class="input" aria-describedby="email">
           <h3>Login</h3>
           <input
             :required="true"

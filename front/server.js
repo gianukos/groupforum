@@ -4,7 +4,7 @@ import fs from 'fs';
 // "module" assigned as property "type" in package.json
 
 const normalizePort = (val) => {
-    const port = parseInt(val, 10);
+const port = parseInt(val, 10);
 
     if (isNaN(port)) {
         return val;

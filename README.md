@@ -1,5 +1,9 @@
 # ocP7
-#### Open Classrooms Web Developer path full network stack project 
+### Open Classrooms Web Developer path full network stack project 
+
+##### Instructions to build and run the application
+
+A first requirement should be [to install a MySQL database on the local system.](https://dev.mysql.com/downloads/mysql/)
 
 Please look at 
 

@@ -24,9 +24,11 @@ export default {
                 const response = await fetch(this.endpoint + '/comments/comments' + pParam, requestOpts).catch((error) => { return false })
                 if ( response.status === 200  ) {
                     let commentsObj = await response.json();
-                    this.allcomments = commentsObj.userData
+                    if ( ! commentsObj.message ){
+                        this.allcomments = commentsObj.userData
+                    }
                 }
-                if ( this.allcomments.length ) { // async double-check
+                if ( this.allcomments && this.allcomments.length > 0) { // async double-check
                     this.expandComments()
                 }
             })();
@@ -62,6 +64,13 @@ export default {
                 this.showallcomments = true;
             }
         },
+        resetComments(){
+            while( this.allcomments && this.allcomments.length > 0 ){
+                this.allcomments.pop();
+            }
+            this.allcomments = []
+            this.cbuttonval = 'show group comments';
+        },
         formatTimeStamp(t){
             let pd = new Date(t)
             let postdate = pd.toString().split(' ')
@@ -85,9 +94,9 @@ export default {
         <div v-if="showallcomments" class="showcomments">
         <div class="commentsview" v-for="comment in this.allcomments" :key="comment.commentID">
         <span>comment by {{comment.name !== 'none' ? comment.name : 'anonymous'}} on {{this.formatTimeStamp(comment.time_created)}}</span><br>
-        <span>{{comment.comment}}</span>
+        <br><span>{{comment.comment}}</span><br>---<br>
         </div></div>
-        <PostComment :postID="previews.id" :userID="this.userID" :userName="this.userName" @get-reset="getComments()&&expandComments()"></PostComment>
+        <PostComment :postID="previews.id" :userID="this.userID" :userName="this.userName" @get-reset="resetComments()&&getComments()&&expandComments()"></PostComment>
         <button type="button" class="button preview" @click="this.$emit('viewPosts')">back</button>
         </section>
     `

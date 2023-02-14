@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/auth');
+const { loginSignupInputs, validate } = require('../middleware/validator');
 const userControl = require('../controllers/user');
-router.post('/signup', userControl.signup);
-router.post('/login', userControl.login);
+router.post('/signup', loginSignupInputs(), validate, userControl.signup);
+router.post('/login', loginSignupInputs(), validate, userControl.login);
 router.put('/:id', auth, userControl.modProfile);
 router.delete('/:id', auth, userControl.deleteProfile);
 router.get('/:id', auth, userControl.getProfile);

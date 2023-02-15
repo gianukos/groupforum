@@ -50,6 +50,7 @@ export default {
             }
             else {
                 this.i = true;
+                document.getElementById('dbresult').innerText = '';
             }
             let pParam = "?p=" + this.counter;
             let userToken = sessionStorage.getItem('sessionToken');

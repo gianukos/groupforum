@@ -11,7 +11,7 @@ export default {
     template:   `
                 <div>
                     <div>make a comment</div>
-                    <textarea v-model="this.comment" label="comment" rows="3"></textarea>
+                    <textarea v-model="this.comment" label="comment" rows="3" columns="70"></textarea>
                     <br>
                     <div><p id="cdbpostresult"></p></div>
                     <button type="button" class="button submit" @click="submitComment( this.comment, this.userName, this.postID, this.userID )">submit</button>

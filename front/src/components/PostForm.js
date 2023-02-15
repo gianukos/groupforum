@@ -36,6 +36,11 @@ export default {
             const userToken = sessionStorage.getItem('sessionToken');
             const postParams = JSON.parse(dataStr);
             postParams.file = fileParam
+            if ( this.edit.topic === '' ){
+                dbpostresult.innerText = "Please include a post title"
+                document.getElementById('topic').style = "border:solid 8px #f0d3d8"
+                return
+            }
             const urlPattern = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/ ;
             if ( postParams.url.length > 0 && ! urlPattern.test(postParams.url.length)){
                 postParams.url = '';
@@ -49,7 +54,7 @@ export default {
                 const response = await fetch(this.endpoint + "/posts/create", requestOpts).catch(	(error) => { return false })
                 const body = await response.json();
                 const dbpostresult = document.getElementById('dbpostresult');
-                dbpostresult.scrollIntoView({block: "start", inline:"start"});
+                dbpostresult.scrollIntoView({block: "start", inline:"center"});
                 if ( response.status === 200 ){
                     dbpostresult.innerText = "Post created!"
                 } else if ( response.status === 400) {
@@ -71,7 +76,7 @@ export default {
     <form type="submit">
         <h3>New Post<br>____________</h3>
         <label for="topic"><h4 class="edit">Create a post</h4></label>
-        <input v-model="edit.topic" type="text" name="topic" id="topic" placeholder="Give your post a title" maxlength=100>
+        <input v-model="edit.topic" type="text" name="topic" id="topic" placeholder="Give your post a title" maxlength=100 required>
         <label for="description"><h4 class="edit">Description of post</h4></label>
         <div>
             <textarea v-model="edit.desc" name="description" id="description" label="description" placeholder="Describe the content of your post" spellcheck="true" rows="8" cols="70"></textarea><br>

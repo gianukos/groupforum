@@ -20,6 +20,7 @@ export default {
     methods: {
         showButton() {
             this.showForm = !this.showForm;
+            document.getElementById('dbresult').innerText = '';
             this.buttonVal = ( this.showForm ? "Cancel posting" : "Create a post" );
         },
         showPosts() {

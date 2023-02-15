@@ -26,8 +26,10 @@
 				100% {opacity: 0.15;transform: translateY(-190px);}
 			}
 			#app { text-align: center;}
-			header{display: block;  padding-bottom: 15px; border-bottom-color:purple; border-bottom-style:solid}
-			header div.logo{position: relative; margin-right: 55%;  display:block; z-index:1}
+			header.head{display: block;  padding-bottom: 15px;}
+			header.borderline::before{content:''; border-bottom-color:purple; border-bottom-style:solid;
+			position:absolute; top: -37%;  left: 50%;  transform: translate(-50%, -50%);  width: 100%;  height: 100%; ; z-index:1}
+			header div.logo{position: relative; margin-right: 55%;  display:inline-block; z-index:1}
 			main.groupomania h1{color: pink; padding: 5rem 5rem; font-size: 32pt; position: relative; right: 24px; display:block; z-index:1}
 			h4.edit, p#dbresult, p#dbpostresult{color: pink; padding: 1rem 1rem; font-size: 18pt;}
 			label h4{color: pink; margin-top: 1.5rem;}
@@ -39,18 +41,22 @@
 			nav.welcome a:hover {color: #01fff6;}
 			nav.welcome a:not(:hover) {color: #ffffff;}
 			nav.welcome a:last-child {margin-left:80px;}
-			section.userInfo, div.forumSections{display:flex; flex-direction: column; align-content: center; justify-content: stretch; position: relative; bottom: 150px; flex-wrap: wrap;}
+			section.userInfo, div.forumSections{display:flex; flex-direction: column; align-content: center; justify-content: stretch; 
+			position: relative; bottom: 150px; flex-wrap: wrap;}
 			div.input{text-align: center;}
 			div.firstmsg p{margin: 0 25% 10px;}
 			section#newuser p span{color: pink;}
 			input{height: 48px; width: 800px; margin: 10px 300px;}
 			div.input input:not(.submit,.file,.email,.password){width: 500px;}
-			input.submit, input.button{width: 10rem; border-radius: 10px; border: 3px outset #38287c; color: #27087a; font-weight: 600; background-color: #dbf1f5; font-size: .9rem;  transition: background-color  2.4s ease-in-out; transition: box-shadow  2.4s ease-in-out;}
+			input.submit, input.button{width: 10rem; border-radius: 10px; border: 3px outset #38287c; color: #27087a; font-weight: 600; 
+			background-color: #dbf1f5; font-size: .9rem;  transition: background-color  2.4s ease-in-out; transition: box-shadow  2.4s ease-in-out;}
 			input.submit:hover, input.button:hover { background-color: #afe5ee;   box-shadow: 0 1px 2px #00000099}
 			input.submit:not(:hover), input.button:not(:hover) { background-color:#dbf1f5; box-shadow: none;}
 			input.file{width: 16rem; background-color: blue; color:white;  border-radius:6px; border: solid #38287c 1px; height: 1.5em; width: 14em;}
-			section.recent{display: flex; flex-direction:row; flex-wrap: wrap; justify-content: center; position: relative; bottom: 185px; text-align: center }
-			div.recent { font-size: 11pt; font-weight: 600; padding: 5px; border: .5px solid #afe5ee; border-right-style: none; border-left-style: none;  }
+			section.recent{display: flex; flex-direction:row; flex-wrap: wrap; justify-content: center; position: relative; bottom: 185px; 
+			text-align: center }
+			div.recent { font-size: 11pt; font-weight: 600; padding: 5px; border: .5px solid #afe5ee; border-right-style: none;
+			border-left-style: none;  }
 			div.recent span{padding-left: 6px; flex-wrap: inherit;}
 			div.recent a{color:#dbf1f5;}
 			button.recent{border-radius:15px; margin-bottom: 15px;}
@@ -66,19 +72,24 @@
 			section.postpage div.showcomments {color:#01fff6; font-size: 9pt; margin-bottom: 15px;}
 			span.poster { color:#01fff6;}
 			a.scrollto{text-decoration: none;}
-			div.scrollto{color:#f0d3d8; text-decoration: none; box-shadow: 0 1px 2px #660080;  padding: 6px; border-radius: 25%;  font-size:14pt; background-color: #172174; width: 28px; height: 28px; margin: 0 0 150px 70%; opacity: 0.75; transition: font-size  6.4s ease-in-out; transition: box-shadow  6.4s ease-in-out;}
+			div.scrollto{color:#f0d3d8; text-decoration: none; box-shadow: 0 1px 2px #660080;  padding: 6px; border-radius: 25%;  
+			font-size:14pt; background-color: #172174; width: 28px; height: 28px; margin: 0 0 150px 70%; opacity: 0.75; 
+			transition: font-size  6.4s ease-in-out; transition: box-shadow  6.4s ease-in-out;}
 			div.scrollto:hover{color: white; font-weight:500; font-size:14.5pt;  box-shadow: 0 2px 3px #280331; opacity: .95;}
 			footer{height: 16px; width: 100%; border-top-color:purple; border-top-style:solid;}
 			footer hr{opacity: 0; margin-top: 5%;}
 			@media screen and (max-width: 1535px){input, textarea, div.recent {max-width: 400px;  align-items: center;}}
-			@media screen and (max-width: 815px){div.logo svg{width: 285px; height: 95px;} nav.welcome{top: 6%;} nav.welcome a{font-size: 14pt;} nav.welcome a:last-child{margin-left: 45px}nav.welcome a:focus {color: #01fff6;}nav.welcome a:not(:focus){color: #fffaaa;}input, textarea, div.recent {max-width: 400px; } section#user p {max-width: 400px; display: inline-block;}} 
+			@media screen and (max-width: 815px){div.logo svg{width: 285px; height: 95px;} nav.welcome{top: 6%;} nav.welcome a{font-size: 14pt;} 
+			nav.welcome a:last-child{margin-left: 45px}nav.welcome a:focus {color: #01fff6;}nav.welcome a:not(:focus){color: #fffaaa;}
+			input, textarea, div.recent {max-width: 400px; } section#user p {max-width: 400px; display: inline-block;}} 
 			@media screen and (max-width: 485px){div.logo svg{width: 235px;} nav.welcome a{font-size: 13pt;}}
-			@media screen and (max-width: 415px) {div.logo svg{width: 185px; height:95px;}nav.welcome a{font-size: 12pt;} nav.welcome a:last-child{margin-left: 25px}  input, textarea, div.recent{max-width: 200px;} section#user p {max-width: 300px;}}
+			@media screen and (max-width: 415px) {div.logo svg{width: 185px; height:95px;}nav.welcome a{font-size: 12pt;} 
+			nav.welcome a:last-child{margin-left: 25px}  input, textarea, div.recent{max-width: 200px;} section#user p {max-width: 300px;}}
 			@media screen and (max-width: 315px){div.logo svg{width: 145px;}}
 		</style>
 	</head>
 	<body>
-		<header>
+		<header class="borderline">
 			<div class="logo" id="logo">
 				<svg data-v-5f19e91b="" xmlns="http://www.w3.org/2000/svg" width="485" height="78" viewBox="0 0 485 78">
 					<!---->
@@ -121,6 +132,6 @@
 			</div>
 			<div id="app"></div>
 		</main>
-		<footer><hr></footer>
+		<footer><hr><br><br></footer>
 		</body>
 	</html>

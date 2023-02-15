@@ -12,6 +12,7 @@ export default {
     methods: {
         showPosts() {
                 var myuser = sessionStorage.getItem('sessionUser');
+                document.getElementById('dbresult').innerText = '';
                 this.$emit('displayList')
                 this.buttonval === "Read group posts" ? this.buttonval = "Hide group posts" : this.buttonval = "Read group posts"
         }

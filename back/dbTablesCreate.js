@@ -13,7 +13,7 @@ connection.query(
           name varchar(100) NOT NULL, 
           email varchar(100) NOT NULL,
           password varchar(100) NOT NULL,
-          bio varchar(100) NOT NULL,
+          bio varchar(1000) NOT NULL,
           PRIMARY KEY (userID),
           UNIQUE KEY email (email)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -49,7 +49,7 @@ connection.query(
       postID varchar(36) NOT NULL,
       userID varchar(36) NOT NULL,
       name varchar(100) NOT NULL,
-      comment varchar(5000) NOT NULL,
+      comment varchar(1000) NOT NULL,
       time_created datetime DEFAULT CURRENT_TIMESTAMP,
       PRIMARY KEY (commentID),
       KEY fk_comment (userID),

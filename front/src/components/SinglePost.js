@@ -77,11 +77,17 @@ export default {
             postdate = postdate[0] + ' ' + postdate[1] + ' ' +  postdate[2] + ' ' + postdate[4];
             return postdate
         },
+        decoded(u){
+            let areaURL = document.createElement('textarea');
+            areaURL.innerHTML = u;
+            let url = require('url')
+            return areaURL.value;
+        }
     },
     template:
     `
         <section class="postpage">
-        <div v-if="previews.url.length > 0"><a :href="previews.url">{{previews.url}}</a></div>
+        <div v-if="previews.url.length > 0"><a :href="this.decoded(previews.url)">{{this.decoded(previews.url)}}</a></div>
         <h3>{{previews.Topic}}</h3>
         <div><span>by {{previews.name === 'none' ? 'anonymous' : previews.name}} on </span><span>{{previews.Date}}</span></div>
         <div class="postpage"><strong>{{previews.description}}</strong></div>

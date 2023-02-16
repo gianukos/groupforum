@@ -21,15 +21,15 @@ exports.createPost = async (req, res) => {
                 if (postData.length > 0 ){
                     res.status(400).json({error:"duplicate post"});
                 } else {
-                    sql = 'INSERT INTO posts( userID, name, url, topic, description, filepath, file) VALUES( ?, ?, ?, ?, ?, ?, ? )'
+                    sql = 'INSERT INTO posts( userID, name, topic, description, url, filepath, file) VALUES( ?, ?, ?, ?, ?, ?, ? )'
                     pool.query(
                         sql,
                         [
                         body.id,
                         body.name,
-                        body.url,
                         body.topic,
                         body.description,
+                        body.url,
                         body.filepath,
                         body.file
                         ],

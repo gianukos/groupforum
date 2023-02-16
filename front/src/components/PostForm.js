@@ -42,7 +42,7 @@ export default {
                 return
             }
             const urlPattern = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/ ;
-            if ( postParams.url.length > 0 && ! urlPattern.test(postParams.url.length)){
+            if ( postParams.url.length > 0 && ! urlPattern.test(postParams.url)){
                 postParams.url = '';
                 this.edit.url = '';
                 this.urlerror = true

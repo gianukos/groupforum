@@ -80,7 +80,6 @@ export default {
         decoded(u){
             let areaURL = document.createElement('textarea');
             areaURL.innerHTML = u;
-            let url = require('url')
             return areaURL.value;
         }
     },

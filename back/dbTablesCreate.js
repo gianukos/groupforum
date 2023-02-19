@@ -17,7 +17,7 @@ connection.query(
           PRIMARY KEY (userID),
           UNIQUE KEY email (email)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-      `, function(error, result){if (error) throw error;
+      `, function(error){if (error) throw error;
           else console.log("----users----");})
   )
   
@@ -33,12 +33,12 @@ connection.query(
         filepath varchar(500) DEFAULT NULL,
         file blob(65535) DEFAULT NULL,
         time_created datetime DEFAULT CURRENT_TIMESTAMP,
-        likes JSON DEFAULT NULL,
         PRIMARY KEY (postID),
         KEY fk_user (userID),
         CONSTRAINT fk_user FOREIGN KEY (userID) REFERENCES users (userID) ON DELETE CASCADE
+        TRIGGER after_posts_insert AFTER INSERT ON posts FOR EACH ROW insert into read_posts values ( new.userID, new.postID )
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-      `, function(error, result){if (error) throw error;
+      `, function(error){if (error) throw error;
         else console.log("----posts----");})
 )
 
@@ -57,9 +57,20 @@ connection.query(
       CONSTRAINT fk_comment FOREIGN KEY (userID) REFERENCES users (userID) ON DELETE CASCADE,
       CONSTRAINT fk_post FOREIGN KEY (postID) REFERENCES posts (postID) ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-  `, function(error, result){if (error) throw error;
+  `, function(error){if (error) throw error;
     else console.log("----comments----");})
 )
+
+.then(connection.query(
+  `
+  CREATE TABLE IF NOT EXISTS read_posts (
+      userID varchar(36) DEFAULT NULL,
+      postID varchar(36) DEFAULT NULL
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `, function(error){if (error) throw error;
+    else console.log("----read_posts----");})
+)
+
 .then(connection.query(
       'show tables' , function(err, result, fields){
         console.log("'show tables' query")

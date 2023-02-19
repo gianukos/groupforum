@@ -49,7 +49,7 @@ export default {
             <CreatePosts :userID="this.userID" :userName="this.userName" @display-list="showPosts"></CreatePosts>
             </div>
             <div v-else-if="showlist">
-            <PostList @view-single="showSingle('list')" @view-forum="showPosts" ref="list"></PostList>
+            <PostList :userID="this.userID" @view-single="showSingle('list')" @view-forum="showPosts" ref="list"></PostList>
             </div>
             <div v-else>
             <SinglePost  @view-posts="showPosts" :previews="previews" :userID="this.userID" :userName="this.userName"></SinglePost>

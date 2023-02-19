@@ -118,6 +118,45 @@ exports.allPosts = async (req, res) => {
         }
     })
 };
+exports.unread = async (req, res) => {
+    let sql = 'select postID from read_posts where userID = ?'
+    pool.query(
+        sql,
+        [
+            req.params.id
+        ],
+        (error, userData) => {
+            if (error){
+                return res.status(401).json({error: error});
+            } else if ( userData.length > 0 && userData.rowCount != 0 ){
+                res.status(200).json({
+                    userData
+                });   
+            } else {
+                if ( userData.length === 0 ) {
+                    res.status(404)
+            }
+        }
+    })
+}
+exports.wasRead = async (req, res) => {
+    let sql = 'insert into read_posts values ( ?, ? )'
+    pool.query(
+        sql,
+        [
+            req.params.id, 
+            req.query.p,
+        ],
+        (error) => {
+            if (error){
+                return res.status(401).json({error: error});
+            } else {
+                res.status(200).json({
+                    message: `post ${req.query.p} read by ${req.params.id}`
+                });   
+            } 
+    })
+}
 exports.getFile = async (req, res) => {
     let sql = 'select file from posts where postID = ?'
     await pool.query(

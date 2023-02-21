@@ -32,9 +32,10 @@ export default {
             reader.readAsDataURL(select)
         },
         postForm( idParam, nameParam, topicParam, descParam, urlParam, pathParam, fileParam ){
-            var dataStr = `{"id":"${idParam}", "name":"${nameParam}", "topic":"${topicParam}", "description":"${descParam}", "url":"${urlParam}", "filepath":"${pathParam}"}`;
+            var dataStr = `{"id":"${idParam}", "name":"${nameParam}", "topic":"${topicParam}", "url":"${urlParam}", "filepath":"${pathParam}"}`;
             const userToken = sessionStorage.getItem('sessionToken');
             const postParams = JSON.parse(dataStr);
+            postParams.description = descParam
             postParams.file = fileParam
             if ( this.edit.topic === '' ){
                 dbpostresult.innerText = "Please include a post title"

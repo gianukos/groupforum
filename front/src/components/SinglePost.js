@@ -78,6 +78,7 @@ export default {
             return postdate
         },
         decoded(u){
+            // use of express-validator  
             let areaURL = document.createElement('textarea');
             areaURL.innerHTML = u;
             return areaURL.value;
@@ -87,9 +88,9 @@ export default {
     `
         <section class="postpage">
         <div v-if="previews.url.length > 0"><a :href="this.decoded(previews.url)">{{this.decoded(previews.url)}}</a></div>
-        <h3>{{previews.Topic}}</h3>
+        <h3>{{this.decoded(previews.Topic)}}</h3>
         <div><span>by {{previews.name === 'none' ? 'anonymous' : previews.name}} on </span><span>{{previews.Date}}</span></div>
-        <div class="postpage"><strong>{{previews.description}}</strong></div>
+        <div class="postpage"><strong>{{this.decoded(previews.description)}}</strong></div>
         <div v-if="previews.path">
         <div class="comments"><a @click="getImage()"><span v-show="previews.path">{{imgbuttonval}}{{previews.path}}</span><br>
         <img v-show="imgbuttonval === 'hide '" id="previewspath" style="height:300px; width:300px;" alt="image posted by {{previews.name}}">
@@ -99,7 +100,7 @@ export default {
         <div v-if="showallcomments" class="showcomments">
         <div class="commentsview" v-for="comment in this.allcomments" :key="comment.commentID">
         <span>comment by {{comment.name !== 'none' ? comment.name : 'anonymous'}} on {{this.formatTimeStamp(comment.time_created)}}</span><br>
-        <br><span>{{comment.comment}}</span><br>---<br>
+        <br><span>{{this.decoded(comment.comment)}}</span><br>---<br>
         </div></div>
         <PostComment :postID="previews.id" :userID="this.userID" :userName="this.userName" @get-reset="resetComments()&&getComments()&&expandComments()"></PostComment>
         <button type="button" class="button preview" @click="this.$emit('viewPosts')">back</button>

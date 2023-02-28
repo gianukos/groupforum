@@ -36,12 +36,15 @@ connection.query(
         PRIMARY KEY (postID),
         KEY fk_user (userID),
         CONSTRAINT fk_user FOREIGN KEY (userID) REFERENCES users (userID) ON DELETE CASCADE
-        TRIGGER after_posts_insert AFTER INSERT ON posts FOR EACH ROW insert into read_posts values ( new.userID, new.postID )
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
       `, function(error){if (error) throw error;
         else console.log("----posts----");})
 )
-
+.then(connection.query(
+  `
+   CREATE TRIGGER after_posts_insert AFTER INSERT ON posts FOR EACH ROW insert into read_posts values ( new.userID, new.postID )
+   `, function(error){if (error) throw error;})
+ )
 .then(connection.query(
   `
   CREATE TABLE IF NOT EXISTS comments (

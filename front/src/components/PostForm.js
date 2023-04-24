@@ -14,7 +14,7 @@ export default {
     },
     methods: {
         loadFile(e){
-            const reader = new FileReader();
+            // const reader = new FileReader();
             let select = e.target.files[0]
             let tmpname  =  select.name.split(' ').join('_');
             let extension = tmpname.split('.').pop();
@@ -26,10 +26,10 @@ export default {
                 Object.defineProperty(select, "name" , {value: this.edit.filepath})
                 console.log('Selected file ' + select.name)
             }
-            reader.addEventListener("load", () => {
-                this.edit.file =  reader.result 
-            }, false);
-            reader.readAsDataURL(select)
+            // reader.addEventListener("load", () => {
+            //     this.edit.file =  reader.result 
+            // }, false);
+            // reader.readAsDataURL(select)
         },
         postForm( idParam, nameParam, topicParam, descParam, urlParam, pathParam, fileParam ){
             var dataStr = `{"id":"${idParam}", "name":"${nameParam}", "topic":"${topicParam}", "url":"${urlParam}", "filepath":"${pathParam}"}`;
@@ -74,7 +74,7 @@ export default {
     <section>
     <div class="postform">
     <div class="input"> 
-    <form type="submit">
+    <form type="submit" enctype="multipart/form-data">
         <h3>New Post<br>____________</h3>
         <label for="topic"><h4 class="edit">Create a post</h4></label>
         <input v-model="edit.topic" type="text" name="topic" id="topic" placeholder="Give your post a title" maxlength=100 required>

@@ -68,7 +68,8 @@ connection.query(
   `
   CREATE TABLE IF NOT EXISTS read_posts (
       userID varchar(36) DEFAULT NULL,
-      postID varchar(36) DEFAULT NULL
+      postID varchar(36) DEFAULT NULL,
+      UNIQUE KEY read_posts_userID_postID (userID, postID)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
   `, function(error){if (error) throw error;
     else console.log("----read_posts----");})

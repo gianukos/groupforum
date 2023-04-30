@@ -7,6 +7,7 @@ export default {
     data(){
         return{
             endpoint: 'http://localhost:3000/api',
+            imageurl: `http://localhost:3000/images/${this.previews.path}`, 
             showallcomments: false,
             allcomments:[],
             cbuttonval:"show group comments",
@@ -35,23 +36,7 @@ export default {
             return true
         },
         getImage(){
-            if ( this.imgbuttonval === "hide ") {
-                this.imgbuttonval = "display "
-                return true
-            }
-            let pParam = "?p=" + this.previews.id;
-            let userToken = sessionStorage.getItem('sessionToken');
-            let requestOpts = { method:"GET",  headers:{"Content-Type":"x-www-form-urlencoded", "Authorization": "Bearer " + userToken}};
-            
-            (async () => {
-                const response = await fetch(this.endpoint + '/posts/image' + pParam, requestOpts).catch((error) => { return false });
-                if ( response.status === 200  ) {
-                    this.imgbuttonval = "hide "
-                    let fileBlob = await response.json();
-                    let output = document.getElementById('previewspath')
-                    output.src = fileBlob.userDataBuf
-                    }
-            })();  
+            this.imgbuttonval === "display " ? this.imgbuttonval = "hide " : this.imgbuttonval = "display "
         },        
         expandComments(){
             if( this.showallcomments ){
@@ -87,13 +72,13 @@ export default {
     template:
     `
         <section class="postpage">
-        <div v-if="previews.url.length > 0"><a :href="this.decoded(previews.url)">{{this.decoded(previews.url)}}</a></div>
-        <h3>{{this.decoded(previews.Topic)}}</h3>
+        <div v-if="previews.url.length > 0"><a :href="decoded(previews.url)">{{decoded(previews.url)}}</a></div>
+        <h3>{{decoded(previews.Topic)}}</h3>
         <div><span>by {{previews.name === 'none' ? 'anonymous' : previews.name}} on </span><span>{{previews.Date}}</span></div>
         <div class="postpage"><strong>{{this.decoded(previews.description)}}</strong></div>
         <div v-if="previews.path">
         <div class="comments"><a @click="getImage()"><span v-show="previews.path">{{imgbuttonval}}{{previews.path}}</span><br>
-        <img v-show="imgbuttonval === 'hide '" id="previewspath" style="height:300px; width:300px;" alt="image posted by {{previews.name}}">
+        <img v-show="imgbuttonval === 'hide '" :src="imageurl" style="height:300px; width:300px;" alt="image posted by user">
         </a></div>
         </div>
         <div class="comments"><a @click="getComments()&&expandComments()">{{cbuttonval}}</a></div>

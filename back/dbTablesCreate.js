@@ -31,7 +31,6 @@ connection.query(
         description varchar(5000) NOT NULL,
         url varchar(100) DEFAULT NULL,
         filepath varchar(500) DEFAULT NULL,
-        file blob(65535) DEFAULT NULL,
         time_created datetime DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (postID),
         KEY fk_user (userID),

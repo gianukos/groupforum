@@ -4,6 +4,9 @@ require("dotenv").config();
 exports.createPost = async (req, res) => {
     if ( typeof req.body !== null ){
         const body = req.body;
+        if ( req.file ){
+            body.filepath = req.file.filename
+        }
         const url = req.protocol + '://' + req.get('host');
         const imgpath = url + '/images/';
         let sql = 'SELECT description FROM posts WHERE name = ? and topic = ? and description = ?'
@@ -21,7 +24,7 @@ exports.createPost = async (req, res) => {
                 if (postData.length > 0 ){
                     res.status(400).json({error:"duplicate post"});
                 } else {
-                    sql = 'INSERT INTO posts( userID, name, topic, description, url, filepath, file) VALUES( ?, ?, ?, ?, ?, ?, ? )'
+                    sql = 'INSERT INTO posts( userID, name, topic, description, url, filepath) VALUES( ?, ?, ?, ?, ?, ?)'
                     pool.query(
                         sql,
                         [
@@ -31,7 +34,6 @@ exports.createPost = async (req, res) => {
                         body.description,
                         body.url,
                         body.filepath,
-                        body.file
                         ],
                         (error) => {
                             if (error){
@@ -64,9 +66,7 @@ exports.recentPost = async (req, res) => {
                     limit = 'end';
                     result = userData.length - 1;
                 }
-                //console.log(userData[result].time_created)
                 pd = `${userData[result].time_created}`.split(' ')
-                //console.log(pd)
                 postdate = pd[0] + ' ' + pd[1] + ' ' +  pd[2] + ' ' + pd[4];
                 console.log(`Data requested for user: ${req.params.id} ${postdate}`)
                 res.status(200).json({
@@ -149,7 +149,11 @@ exports.wasRead = async (req, res) => {
         ],
         (error) => {
             if (error){
-                return res.status(401).json({error: error});
+                if ( error.code === 'ER_DUP_ENTRY'){
+                    return res.status(204);
+                } else {
+                    return res.status(401).json({error: error});
+                }
             } else {
                 res.status(200).json({
                     message: `post ${req.query.p} read by ${req.params.id}`
@@ -157,23 +161,3 @@ exports.wasRead = async (req, res) => {
             } 
     })
 }
-exports.getFile = async (req, res) => {
-    let sql = 'select file from posts where postID = ?'
-    await pool.query(
-        sql,
-        [req.query.p],
-        (error, userData) => {
-            if (error){
-                return res.status(401).json({error: error});
-            }else if( userData.length > 0 && userData.rowCount != 0 ){
-                let userDataBuf = userData[0].file.toString()
-                res.status(200).json({
-                    userDataBuf
-                });   
-            } else {
-                if ( userData.length === 0 ) {
-                    res.status(204)
-            }
-        }
-    })
-};

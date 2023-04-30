@@ -1,10 +1,12 @@
 const multer = require('multer');
+const pool = require('../middleware/database');
 
 const MIME_TYPES = {
     'image/jpg': 'jpg', 'image/jpeg': 'jpg', 'image/png': 'png'
 };
 
 const storage = multer.diskStorage({
+    
     destination: (req, file, callback) => {
         callback(null, 'images');
     }, 
@@ -14,8 +16,9 @@ const storage = multer.diskStorage({
         if (Object.values(MIME_TYPES).includes(name.split('.').pop()) === true) {
             name = name.slice(0, name.lastIndexOf('.'));
         }
-        callback(null, name + '.' + Date.now() + '.' + extension);
-    }
-});
+        file.filename = name + '.' + Date.now() + '.' + extension;
+        callback(null, file.filename);
+    }                   
+});  
 
 module.exports = multer({storage: storage}).single('image');

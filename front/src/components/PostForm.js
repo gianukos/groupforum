@@ -3,7 +3,7 @@ export default {
     data(){
         return{
         endpoint: 'http://localhost:3000/api',			
-        edit: {topic:'', desc:'', resrc:'', url:'', filepath:'', file: null},
+        edit: {topic:'', desc:'', resrc:'', url:'', filepath:''},
         router: [],
         urlerror: false
         }
@@ -13,44 +13,47 @@ export default {
         userName: String
     },
     methods: {
-        loadFile(e){
-            const reader = new FileReader();
-            let select = e.target.files[0]
-            let tmpname  =  select.name.split(' ').join('_');
+        loadFile(i){
+            // let select = e.target.files[0]
+            console.log(`selected file ${i.name}`)
+            let tmpname  =  i.name.split(' ').join('_');
             let extension = tmpname.split('.').pop();
             if(! [ 'jpg', 'jpeg', 'png'].includes( extension ) ){
-                this.edit.file = false
-                return
+                // formData.delete('image');
+                return false
             } else {
-                this.edit.filepath = `${tmpname.slice(0, tmpname.lastIndexOf('.'))}.${Date.now()}.${extension}`;
-                Object.defineProperty(select, "name" , {value: this.edit.filepath})
-                console.log('Selected file ' + select.name)
+                // this.edit.filepath = select.name;
+                return true
             }
-            reader.addEventListener("load", () => {
-                this.edit.file =  reader.result 
-            }, false);
-            reader.readAsDataURL(select)
         },
-        postForm( idParam, nameParam, topicParam, descParam, urlParam, pathParam, fileParam ){
-            var dataStr = `{"id":"${idParam}", "name":"${nameParam}", "topic":"${topicParam}", "url":"${urlParam}", "filepath":"${pathParam}"}`;
+        postForm(){
             const userToken = sessionStorage.getItem('sessionToken');
-            const postParams = JSON.parse(dataStr);
-            postParams.description = descParam
-            postParams.file = fileParam
+            
+            const form = document.forms.namedItem("postform");
+            const formData = new FormData(form);
+            formData.append("id", this.userID);
+            formData.append("name", this.userName);
+            formData.append("filepath", this.edit.filepath)
+            if (formData.has('image')){
+                let extMessage = "Please select file with extension 'png' or 'jpg'."
+                if ( ! this.loadFile(formData.get('image')) ){
+                    dbpostresult.innerText = extMessage;
+                    return
+                }
+            } 
             if ( this.edit.topic === '' ){
                 dbpostresult.innerText = "Please include a post title"
                 document.getElementById('topic').style = "border:solid 8px #f0d3d8"
                 return
             }
             const urlPattern = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/ ;
-            if ( postParams.url.length > 0 && ! urlPattern.test(postParams.url)){
-                postParams.url = '';
+            if ( this.edit.url.length > 0 && ! urlPattern.test(this.edit.url)){
                 this.edit.url = '';
                 this.urlerror = true
             } else {
                 this.urlerror = false
             }
-			const requestOpts = { method:"POST",  headers:{"Content-Type":"application/json", "Authorization": "Bearer " + userToken}, body:JSON.stringify(postParams)};
+			const requestOpts = { method:"POST",  headers:{ "Authorization": "Bearer " + userToken}, body:formData};
             (async () => {
                 const response = await fetch(this.endpoint + "/posts/create", requestOpts).catch(	(error) => { return false })
                 const body = await response.json();
@@ -74,7 +77,7 @@ export default {
     <section>
     <div class="postform">
     <div class="input"> 
-    <form type="submit">
+    <form type="submit" enctype="multipart/form-data" method="post" name="postform">
         <h3>New Post<br>____________</h3>
         <label for="topic"><h4 class="edit">Create a post</h4></label>
         <input v-model="edit.topic" type="text" name="topic" id="topic" placeholder="Give your post a title" maxlength=100 required>
@@ -90,13 +93,13 @@ export default {
         <div><p></p></div>
         <label for="submitPost"><span class="edit">Submit your post!</span></label>
         <div class="input">
-			<input type="button"  class="submit" value="submit" id="submitPost" @click="postForm( this.userID, this.userName, edit.topic, edit.desc, edit.url, edit.filepath, edit.file )">
+			<input type="button"  class="submit" value="submit" id="submitPost" @click="postForm()">
 		</div>
         <div><p id="dbpostresult"></p></div>
         <div class="input">
         <h5 class="edit">Option to post an image<br>(jpg or png)</h5>
         <label for="select"></label>
-        <input type="file" class="file" id="select" name="select" @change="this.loadFile($event)" accept="image/jpeg image/png">
+        <input type="file" class="file" id="select" name="image"  accept="image/jpeg, image/png">
         </div>
     </form>
     </div>

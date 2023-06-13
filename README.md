@@ -1,5 +1,5 @@
-# ocP7
-### Open Classrooms Web Developer path full network stack project 
+# groupforum
+### full stack web developer project  
 
 ##### Instructions to build and run the application
 
